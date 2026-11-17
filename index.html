@@ -1,0 +1,2552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SALMAN WELDING WORKSHOP LEDGER</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              950: '#040B16',
+              900: '#071326',
+              850: '#0B192C',
+              800: '#132A4A',
+              700: '#1E3E62',
+              600: '#2A5585'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #071326;
+      color: #f1f5f9;
+    }
+    /* Custom scrollbar for dark navy theme */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #071326;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E3E62;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Print Slip / Receipt Stylesheet */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+      }
+      #appContainer,
+      #adminLoginModal,
+      #customConfirmModal,
+      #toastNotification {
+        display: none !important;
+      }
+      #printSlipContainer {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-navy-900 text-slate-100 min-h-screen antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- =======================================================================
+       PRINTABLE SLIP / JOB RECEIPT AREA (Hidden on Screen, Visible on Print)
+       ======================================================================= -->
+  <div id="printSlipContainer" class="hidden p-8 max-w-xl mx-auto bg-white text-slate-900"></div>
+
+  <!-- =======================================================================
+       MAIN APPLICATION SHELL
+       ======================================================================= -->
+  <div id="appContainer" class="min-h-screen flex flex-col">
+
+    <!-- =====================================================================
+         VIEW 1: PUBLIC WORKER LANDING PAGE (Default Entry — Zero Ledger Leak)
+         ===================================================================== -->
+    <div id="publicLandingView" class="flex-1 flex flex-col">
+      <!-- Top Header -->
+      <header class="sticky top-0 z-30 bg-navy-850/95 backdrop-blur-md border-b border-navy-700/80 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+          <!-- Brand Identity -->
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center text-white shadow-md shadow-sky-950/60 shrink-0 border border-sky-400/30">
+              <i data-lucide="flame" class="w-6 h-6"></i>
+            </div>
+            <div class="min-w-0">
+              <h1 class="text-sm sm:text-lg font-extrabold tracking-tight text-white truncate">
+                SALMAN WELDING WORKSHOP
+              </h1>
+              <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+                <span class="text-[11px] font-medium text-sky-300">Workshop Staff Entry Portal</span>
+                <span class="text-navy-600">•</span>
+                <span id="publicSyncBadge" class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-navy-800 border border-navy-700 text-amber-300">
+                  <span id="publicSyncDot" class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                  <span id="publicSyncText">Local + Sheet Ready</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Action: Prominent Admin Login Button -->
+          <div class="flex items-center gap-2.5 shrink-0">
+            <button type="button" id="openAdminLoginBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-navy-950 font-extrabold text-xs sm:text-sm shadow-md shadow-amber-950/40 transition cursor-pointer">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+              <span>Admin Login</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Landing Content -->
+      <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+        <!-- Welcoming Privacy Banner -->
+        <div class="bg-gradient-to-r from-navy-800 via-navy-800 to-navy-700 rounded-2xl p-4 sm:p-5 border border-sky-500/25 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="clipboard-edit" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h2 class="text-sm sm:text-base font-bold text-white">Daily Workshop Record Submission</h2>
+              <p class="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
+                Welcome! Workshop staff can log <strong class="text-sky-300">Job Income</strong>, <strong class="text-amber-300">Worker Daily &amp; Food Fees</strong>, and <strong class="text-rose-300">Material Expenses</strong> below. All submissions save automatically to the workshop database and Google Sheet. Full financial balances remain private to Admin.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post-Submission Confirmation Card (Shown immediately after worker logs an entry) -->
+        <div id="publicConfirmationCard" class="hidden bg-emerald-950/70 border-2 border-emerald-500/60 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
+          <div class="flex items-start gap-3.5">
+            <div class="w-11 h-11 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 flex items-center justify-center shrink-0">
+              <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-base sm:text-lg font-extrabold text-emerald-300">
+                Record Submitted &amp; Synced to Salman Welding Workshop Sheet!
+              </h3>
+              <p id="publicConfirmSummary" class="text-xs sm:text-sm text-emerald-100/90 mt-1"></p>
+              <p id="publicConfirmCloudStatus" class="text-xs text-emerald-300/80 mt-1 font-medium"></p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-emerald-800/70">
+            <button type="button" id="publicPrintSlipBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-white hover:bg-slate-100 text-navy-950 font-bold text-xs sm:text-sm transition cursor-pointer">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              <span>Print Slip</span>
+            </button>
+            <button type="button" id="publicLogAnotherBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition cursor-pointer">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <span>Log Another Record</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Shared "Log Workshop Record" Form Container on Landing Page -->
+        <div id="publicFormMount" class="bg-navy-850 rounded-3xl border border-navy-700/90 shadow-2xl p-5 sm:p-7">
+          <!-- The unified Workshop Record Form is mounted here by JS -->
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="border-t border-navy-800 py-4 px-4 text-center text-xs text-slate-400">
+        SALMAN WELDING WORKSHOP LEDGER • Secure Chromebook &amp; Google Sites Portal
+      </footer>
+    </div>
+
+    <!-- =====================================================================
+         VIEW 2: FULL ADMIN PORTAL (Unlocked ONLY after Admin ID & Password)
+         ===================================================================== -->
+    <div id="adminPortalView" class="hidden flex-1 flex flex-col lg:flex-row">
+
+      <!-- Mobile/Tablet Drawer Backdrop -->
+      <div id="adminDrawerBackdrop" class="fixed inset-0 bg-navy-950/75 backdrop-blur-xs z-40 hidden lg:hidden"></div>
+
+      <!-- Admin Left Navigation Sidebar -->
+      <aside id="adminSidebar" class="fixed lg:sticky top-0 left-0 z-50 h-screen w-72 lg:w-64 bg-navy-850 border-r border-navy-700/90 flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0 shrink-0">
+        <!-- Brand & Close Drawer -->
+        <div>
+          <div class="p-4 border-b border-navy-700/80 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center text-white shrink-0 border border-sky-400/30">
+                <i data-lucide="flame" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <h2 class="text-xs font-extrabold text-white tracking-tight truncate">SALMAN WELDING</h2>
+                <span class="text-[11px] font-semibold text-amber-400 block truncate">Admin Control Portal</span>
+              </div>
+            </div>
+            <button type="button" id="closeAdminDrawerBtn" class="lg:hidden w-10 h-10 rounded-xl bg-navy-800 text-slate-300 hover:text-white flex items-center justify-center cursor-pointer">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- Navigation Menu -->
+          <nav class="p-3 space-y-1.5">
+            <p class="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Workshop Management</p>
+
+            <button type="button" data-admin-tab="dashboard" class="admin-nav-btn w-full flex items-center gap-3 px-3.5 min-h-[46px] rounded-xl text-sm font-bold bg-sky-600 text-white shadow-md shadow-sky-950/40 transition cursor-pointer">
+              <i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>
+              <span>Dashboard</span>
+            </button>
+
+            <button type="button" data-admin-tab="log-record" class="admin-nav-btn w-full flex items-center gap-3 px-3.5 min-h-[46px] rounded-xl text-sm font-semibold text-slate-300 hover:bg-navy-800 hover:text-white transition cursor-pointer">
+              <i data-lucide="plus-square" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+              <span>Log Record</span>
+            </button>
+
+            <button type="button" data-admin-tab="workers" class="admin-nav-btn w-full flex items-center justify-between px-3.5 min-h-[46px] rounded-xl text-sm font-semibold text-slate-300 hover:bg-navy-800 hover:text-white transition cursor-pointer">
+              <span class="flex items-center gap-3">
+                <i data-lucide="users" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                <span>Workers</span>
+              </span>
+              <span id="sidebarWorkersCount" class="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-navy-700 text-amber-300">0</span>
+            </button>
+
+            <p class="px-3 pt-4 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Cloud &amp; Security</p>
+
+            <button type="button" data-admin-tab="google-setup" class="admin-nav-btn w-full flex items-center gap-3 px-3.5 min-h-[46px] rounded-xl text-sm font-semibold text-slate-300 hover:bg-navy-800 hover:text-white transition cursor-pointer">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-sky-400 shrink-0"></i>
+              <span class="text-left leading-tight">Google Sheets &amp; Site</span>
+            </button>
+
+            <button type="button" data-admin-tab="security" class="admin-nav-btn w-full flex items-center gap-3 px-3.5 min-h-[46px] rounded-xl text-sm font-semibold text-slate-300 hover:bg-navy-800 hover:text-white transition cursor-pointer">
+              <i data-lucide="key-round" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+              <span>Admin Security</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Bottom Logout to Public Landing Page -->
+        <div class="p-3 border-t border-navy-700/80 space-y-2">
+          <div id="adminSyncStatusBox" class="px-3 py-2 rounded-xl bg-navy-900/90 border border-navy-700 text-[11px] flex items-center gap-2 text-slate-300">
+            <span id="adminSyncDot" class="w-2 h-2 rounded-full bg-amber-400 shrink-0"></span>
+            <span id="adminSyncLabel" class="truncate">Google Sheet: Ready</span>
+          </div>
+          <button type="button" id="logoutAdminBtn" class="w-full flex items-center justify-center gap-2 px-3.5 min-h-[46px] rounded-xl text-xs font-extrabold bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 transition cursor-pointer">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span>Logout to Worker Landing Page</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Admin Main Content Column -->
+      <div class="flex-1 min-w-0 flex flex-col">
+        <!-- Mobile/Tablet Top Bar for Admin -->
+        <header class="lg:hidden sticky top-0 z-30 bg-navy-850 border-b border-navy-700 px-4 py-3 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <button type="button" id="openAdminDrawerBtn" class="w-11 h-11 rounded-xl bg-navy-800 text-white flex items-center justify-center shrink-0 cursor-pointer">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+            <div class="min-w-0">
+              <h1 class="text-sm font-extrabold text-white truncate">SALMAN WELDING WORKSHOP</h1>
+              <p class="text-[11px] text-amber-400 font-semibold">Admin Ledger Portal</p>
+            </div>
+          </div>
+          <button type="button" id="mobileLogoutBtn" class="px-3 min-h-[40px] rounded-xl bg-rose-600/25 text-rose-300 border border-rose-500/40 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Exit</span>
+          </button>
+        </header>
+
+        <!-- Admin Tab Views Container -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1550px] w-full mx-auto space-y-6">
+
+          <!-- ===============================================================
+               ADMIN TAB 1: DASHBOARD (KPIs, Charts, Search/Filter Ledger)
+               =============================================================== -->
+          <section id="tab-dashboard" class="admin-tab-panel space-y-6">
+            <!-- Header Bar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">SALMAN WELDING WORKSHOP LEDGER</h2>
+                <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Complete real-time overview of fabrication revenue, worker allowances, expenses &amp; balances</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <button type="button" id="dashSyncNowBtn" class="inline-flex items-center gap-2 px-3.5 min-h-[42px] rounded-xl bg-navy-800 hover:bg-navy-700 text-sky-300 border border-sky-500/30 text-xs font-bold transition cursor-pointer">
+                  <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                  <span>Sync to Sheet</span>
+                </button>
+                <button type="button" id="dashClearSampleBtn" class="inline-flex items-center gap-2 px-3.5 min-h-[42px] rounded-xl bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-700/50 text-xs font-bold transition cursor-pointer">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  <span>Clear Sample Data</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 5-Card KPI Overview Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+              <!-- KPI 1: Total Income -->
+              <div class="bg-navy-850 rounded-2xl p-4 sm:p-5 border border-navy-700/90 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Income</span>
+                  <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                    <i data-lucide="banknote" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <h3 id="kpiTotalIncome" class="text-xl sm:text-2xl font-extrabold text-emerald-400 mt-3 truncate">₦0.00</h3>
+                <p id="kpiIncomeSub" class="text-xs text-slate-400 mt-1">Collected from jobs</p>
+              </div>
+
+              <!-- KPI 2: Total Expenses (Materials + Shop) -->
+              <div class="bg-navy-850 rounded-2xl p-4 sm:p-5 border border-navy-700/90 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Expenses</span>
+                  <div class="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-400 flex items-center justify-center">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <h3 id="kpiTotalExpenses" class="text-xl sm:text-2xl font-extrabold text-rose-400 mt-3 truncate">₦0.00</h3>
+                <p id="kpiExpensesSub" class="text-xs text-slate-400 mt-1">Steel, rods, fuel &amp; tools</p>
+              </div>
+
+              <!-- KPI 3: Labor & Food Costs -->
+              <div class="bg-navy-850 rounded-2xl p-4 sm:p-5 border border-navy-700/90 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Labor &amp; Food Costs</span>
+                  <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                    <i data-lucide="utensils" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <h3 id="kpiLaborFoodCost" class="text-xl sm:text-2xl font-extrabold text-amber-400 mt-3 truncate">₦0.00</h3>
+                <p id="kpiLaborFoodSub" class="text-xs text-slate-400 mt-1">Workers daily &amp; food fees</p>
+              </div>
+
+              <!-- KPI 4: Net Workshop Profit -->
+              <div class="bg-navy-850 rounded-2xl p-4 sm:p-5 border border-sky-500/30 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-sky-300">Net Workshop Profit</span>
+                  <div class="w-9 h-9 rounded-xl bg-sky-500/15 text-sky-400 flex items-center justify-center">
+                    <i data-lucide="trending-up" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <h3 id="kpiNetProfit" class="text-xl sm:text-2xl font-extrabold text-white mt-3 truncate">₦0.00</h3>
+                <p id="kpiNetProfitSub" class="text-xs text-slate-400 mt-1">Income minus all outflows</p>
+              </div>
+
+              <!-- KPI 5: Pending Client Balances -->
+              <div class="bg-navy-850 rounded-2xl p-4 sm:p-5 border border-amber-500/35 shadow-lg">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-amber-300">Pending Balances</span>
+                  <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-300 flex items-center justify-center">
+                    <i data-lucide="clock-alert" class="w-4 h-4"></i>
+                  </div>
+                </div>
+                <h3 id="kpiPendingBalances" class="text-xl sm:text-2xl font-extrabold text-amber-300 mt-3 truncate">₦0.00</h3>
+                <p id="kpiPendingSub" class="text-xs text-slate-400 mt-1">Unpaid client job balances</p>
+              </div>
+            </div>
+
+            <!-- Interactive Chart.js Analytics Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <!-- Chart A: Income vs Outcome Bar Chart -->
+              <div class="lg:col-span-7 bg-navy-850 rounded-2xl p-5 border border-navy-700/90 shadow-lg">
+                <div class="mb-4">
+                  <h3 class="text-base font-extrabold text-white">Income vs Outcome Overview</h3>
+                  <p class="text-xs text-slate-400">Daily collected job income compared against expenses &amp; labor/food fees</p>
+                </div>
+                <div class="relative h-64 w-full">
+                  <canvas id="incomeVsOutcomeChart"></canvas>
+                </div>
+              </div>
+
+              <!-- Chart B: Expense & Labor Breakdown Doughnut -->
+              <div class="lg:col-span-5 bg-navy-850 rounded-2xl p-5 border border-navy-700/90 shadow-lg">
+                <div class="mb-4">
+                  <h3 class="text-base font-extrabold text-white">Expense &amp; Allowance Breakdown</h3>
+                  <p class="text-xs text-slate-400">Distribution across materials, fuel, labor fees &amp; worker food</p>
+                </div>
+                <div class="relative h-64 w-full">
+                  <canvas id="expenseBreakdownChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Master Workshop Ledger Table & Filters -->
+            <div class="bg-navy-850 rounded-2xl border border-navy-700/90 shadow-lg overflow-hidden">
+              <div class="p-4 sm:p-6 border-b border-navy-700/80 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 class="text-base sm:text-lg font-extrabold text-white">Master Workshop Ledger</h3>
+                    <p class="text-xs text-slate-400">Search records, settle unpaid client job balances, print receipts, or delete entries</p>
+                  </div>
+                  <span class="text-xs font-bold px-3 py-1.5 rounded-xl bg-navy-800 border border-navy-700 text-sky-300">
+                    Showing <span id="ledgerVisibleCount">0</span> of <span id="ledgerTotalCount">0</span> records
+                  </span>
+                </div>
+
+                <!-- Search & Type Filter Bar -->
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                  <div class="sm:col-span-7 relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+                      <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="adminSearchInput" placeholder="Search ticket #, client, worker, steel item, notes..." class="w-full min-h-[44px] pl-10 pr-4 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                  </div>
+                  <div class="sm:col-span-3">
+                    <select id="adminTypeFilter" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                      <option value="all">All Record Types</option>
+                      <option value="job">Job Income Only</option>
+                      <option value="labor">Labor &amp; Food Fees Only</option>
+                      <option value="expense">Workshop Expenses Only</option>
+                      <option value="unpaid">Unpaid / Partial Jobs</option>
+                    </select>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <button type="button" id="adminResetFilterBtn" class="w-full min-h-[44px] px-3 rounded-xl bg-navy-800 hover:bg-navy-700 border border-navy-700 text-xs font-bold text-slate-300 transition cursor-pointer">
+                      Reset Filters
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Desktop Table -->
+              <div class="hidden md:block overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-navy-900/90 border-b border-navy-700 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                      <th class="py-3.5 px-4">Ref &amp; Date</th>
+                      <th class="py-3.5 px-3">Type &amp; Category</th>
+                      <th class="py-3.5 px-3">Client / Worker / Details</th>
+                      <th class="py-3.5 px-3">Status</th>
+                      <th class="py-3.5 px-4 text-right">Amount (₦)</th>
+                      <th class="py-3.5 px-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminLedgerTableBody" class="divide-y divide-navy-800 text-sm"></tbody>
+                </table>
+              </div>
+
+              <!-- Mobile Cards -->
+              <div id="adminLedgerMobileCards" class="md:hidden divide-y divide-navy-800"></div>
+
+              <!-- Empty State -->
+              <div id="adminLedgerEmpty" class="hidden py-12 px-4 text-center">
+                <div class="w-12 h-12 rounded-2xl bg-navy-800 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                  <i data-lucide="inbox" class="w-6 h-6"></i>
+                </div>
+                <p class="text-sm font-bold text-white">No workshop records found</p>
+                <p class="text-xs text-slate-400 mt-1">Adjust your search filter or log a new workshop record.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===============================================================
+               ADMIN TAB 2: LOG RECORD (Mounts the exact same 3-Mode Form)
+               =============================================================== -->
+          <section id="tab-log-record" class="admin-tab-panel hidden max-w-4xl mx-auto space-y-4">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-white">Log Workshop Record (Admin)</h2>
+              <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Record Job Income, Worker Daily &amp; Food Allowances, or Workshop Expenses directly to the ledger and Google Sheet</p>
+            </div>
+            <div id="adminFormMount" class="bg-navy-850 rounded-3xl border border-navy-700/90 shadow-2xl p-5 sm:p-7">
+              <!-- Unified Form moves here seamlessly when Admin opens Log Record tab -->
+            </div>
+          </section>
+
+          <!-- ===============================================================
+               ADMIN TAB 3: WORKERS DIRECTORY (Add/Remove & Allowance Summary)
+               =============================================================== -->
+          <section id="tab-workers" class="admin-tab-panel hidden space-y-6">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-white">Workshop Workers Directory</h2>
+              <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
+                Add or remove workshop staff and set their default Daily Labor Fee &amp; Food Fee. Registered workers automatically appear in the Public Landing Page dropdown.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              <!-- Add Worker Form (5 cols) -->
+              <div class="lg:col-span-5 bg-navy-850 rounded-2xl p-5 sm:p-6 border border-navy-700/90 shadow-lg">
+                <h3 class="text-base font-extrabold text-white mb-1 flex items-center gap-2">
+                  <i data-lucide="user-plus" class="w-4 h-4 text-amber-400"></i>
+                  <span>Register New Worker</span>
+                </h3>
+                <p class="text-xs text-slate-400 mb-4">Set standard daily wage and food allowance in Naira (₦)</p>
+
+                <form id="addWorkerForm" class="space-y-3.5">
+                  <div>
+                    <label for="workerNameInput" class="block text-xs font-bold text-slate-300 mb-1">Worker Full Name *</label>
+                    <input type="text" id="workerNameInput" required placeholder="e.g., Ibrahim Abdullahi" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label for="workerRoleInput" class="block text-xs font-bold text-slate-300 mb-1">Workshop Role *</label>
+                      <select id="workerRoleInput" class="w-full min-h-[44px] px-3 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <option value="Master Welder">Master Welder</option>
+                        <option value="Senior Fabricator">Senior Fabricator</option>
+                        <option value="Arc / MIG Welder">Arc / MIG Welder</option>
+                        <option value="Metal Cutter / Grinder">Metal Cutter / Grinder</option>
+                        <option value="Spray Painter / Finisher">Spray Painter / Finisher</option>
+                        <option value="Apprentice">Apprentice</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label for="workerPhoneInput" class="block text-xs font-bold text-slate-300 mb-1">Phone Number</label>
+                      <input type="tel" id="workerPhoneInput" placeholder="e.g., 0803 000 1122" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label for="workerDailyFeeInput" class="block text-xs font-bold text-slate-300 mb-1">Default Daily Fee (₦) *</label>
+                      <input type="number" id="workerDailyFeeInput" required min="0" step="100" placeholder="5000" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm font-bold text-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                    </div>
+                    <div>
+                      <label for="workerFoodFeeInput" class="block text-xs font-bold text-slate-300 mb-1">Default Food Fee (₦) *</label>
+                      <input type="number" id="workerFoodFeeInput" required min="0" step="50" placeholder="1500" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm font-bold text-amber-300 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                    </div>
+                  </div>
+
+                  <button type="submit" class="w-full min-h-[48px] px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-950 font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+                    <i data-lucide="user-check" class="w-4 h-4"></i>
+                    <span>Add Worker &amp; Sync</span>
+                  </button>
+                </form>
+              </div>
+
+              <!-- Registered Workers List & Paid Totals (7 cols) -->
+              <div class="lg:col-span-7 bg-navy-850 rounded-2xl border border-navy-700/90 shadow-lg overflow-hidden">
+                <div class="p-5 border-b border-navy-700/80 flex items-center justify-between">
+                  <div>
+                    <h3 class="text-base font-extrabold text-white">Active Workshop Workers</h3>
+                    <p class="text-xs text-slate-400">Cumulative daily labor &amp; food allowances paid per worker</p>
+                  </div>
+                </div>
+                <div id="workersListContainer" class="divide-y divide-navy-800"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===============================================================
+               ADMIN TAB 4: GOOGLE SHEETS & GOOGLE SITE DEPLOYMENT SETUP
+               =============================================================== -->
+          <section id="tab-google-setup" class="admin-tab-panel hidden space-y-6 max-w-5xl">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-white">Google Sheets &amp; Google Site Live Setup</h2>
+              <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
+                Connect your Google Drive Spreadsheet so every record from both the Worker Landing Page and Admin Portal saves online automatically, and publish live on Google Sites.
+              </p>
+            </div>
+
+            <!-- Step 1: Google Sheet & Web App URL Connection -->
+            <div class="bg-navy-850 rounded-2xl p-5 sm:p-6 border border-navy-700/90 shadow-lg space-y-4">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-full bg-sky-500 text-navy-950 font-extrabold text-xs flex items-center justify-center">1</span>
+                <h3 class="text-base font-extrabold text-white">Connect Your Google Drive Spreadsheet</h3>
+              </div>
+
+              <form id="googleConfigForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label for="googleSheetUrlInput" class="block text-xs font-bold text-slate-300 mb-1">Google Sheet Link (For Quick Opening)</label>
+                    <input type="url" id="googleSheetUrlInput" placeholder="https://docs.google.com/spreadsheets/d/..." class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                  </div>
+                  <div>
+                    <label for="googleWebAppUrlInput" class="block text-xs font-bold text-slate-300 mb-1">Google Apps Script Web App URL (Auto-Save Endpoint) *</label>
+                    <input type="url" id="googleWebAppUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                  <button type="submit" class="inline-flex items-center gap-2 px-5 min-h-[44px] rounded-xl bg-sky-500 hover:bg-sky-400 text-navy-950 font-extrabold text-xs sm:text-sm transition cursor-pointer">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    <span>Save Google Sheet Connection</span>
+                  </button>
+
+                  <button type="button" id="syncAllToSheetBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition cursor-pointer">
+                    <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                    <span>Sync All Existing Records to Google Sheet</span>
+                  </button>
+
+                  <a id="openConnectedSheetLink" href="#" target="_blank" rel="noopener noreferrer" class="hidden inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-navy-800 hover:bg-navy-700 border border-navy-600 text-sky-300 font-bold text-xs sm:text-sm transition">
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                    <span>Open Google Sheet</span>
+                  </a>
+                </div>
+              </form>
+            </div>
+
+            <!-- Step 2: 1-Click Copy Google Apps Script Code -->
+            <div class="bg-navy-850 rounded-2xl p-5 sm:p-6 border border-navy-700/90 shadow-lg space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-full bg-amber-500 text-navy-950 font-extrabold text-xs flex items-center justify-center">2</span>
+                  <div>
+                    <h3 class="text-base font-extrabold text-white">Google Apps Script Auto-Generator Code</h3>
+                    <p class="text-xs text-slate-400">Automatically creates <code class="text-sky-300">Master_Ledger</code> and <code class="text-amber-300">Workers</code> tabs in your Google Drive Sheet</p>
+                  </div>
+                </div>
+                <button type="button" id="copyAppsScriptBtn" class="inline-flex items-center gap-2 px-4 min-h-[42px] rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-950 font-extrabold text-xs transition cursor-pointer">
+                  <i data-lucide="copy" class="w-4 h-4"></i>
+                  <span>Copy Google Apps Script Code</span>
+                </button>
+              </div>
+
+              <ol class="text-xs text-slate-300 space-y-1.5 list-decimal list-inside bg-navy-900/90 p-4 rounded-xl border border-navy-700">
+                <li>Open Google Drive on your Chromebook and create a new <strong>Google Sheet</strong> named <em>Salman Welding Workshop Ledger</em>.</li>
+                <li>In the Google Sheet top menu, click <strong>Extensions &rarr; Apps Script</strong>.</li>
+                <li>Delete any default code, click <strong>Copy Google Apps Script Code</strong> above, and paste it into the editor.</li>
+                <li>Click <strong>Deploy &rarr; New deployment &rarr; Web app</strong>. Set <em>Execute as: Me</em> and <em>Who has access: Anyone</em>.</li>
+                <li>Copy the generated <strong>Web App URL</strong> and paste it into Step 1 above!</li>
+              </ol>
+
+              <pre id="appsScriptCodeBlock" class="bg-navy-950 text-sky-300 text-xs p-4 rounded-xl border border-navy-700 overflow-x-auto max-h-60 leading-relaxed font-mono"></pre>
+            </div>
+
+            <!-- Step 3: Publish Live on Google Sites -->
+            <div class="bg-navy-850 rounded-2xl p-5 sm:p-6 border border-navy-700/90 shadow-lg space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-full bg-emerald-500 text-navy-950 font-extrabold text-xs flex items-center justify-center">3</span>
+                  <div>
+                    <h3 class="text-base font-extrabold text-white">Download &amp; Publish Live on Google Sites</h3>
+                    <p class="text-xs text-slate-400">Download the self-contained HTML file to embed in Google Sites or host online</p>
+                  </div>
+                </div>
+                <button type="button" id="downloadStandaloneHtmlBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-sky-500 hover:bg-sky-400 text-navy-950 font-extrabold text-xs sm:text-sm transition cursor-pointer">
+                  <i data-lucide="download" class="w-4 h-4"></i>
+                  <span>Download Standalone HTML for Google Sites / Hosting</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
+                <div class="p-4 rounded-xl bg-navy-900/90 border border-navy-700 space-y-1.5">
+                  <p class="font-bold text-white">Option A: Direct Google Sites Embed Code</p>
+                  <p>1. Open <strong>sites.google.com</strong> and create/open your workshop site.</p>
+                  <p>2. Click <strong>Insert &rarr; Embed &rarr; Embed code</strong>.</p>
+                  <p>3. Open the downloaded HTML file in ChromeOS Text, copy all text, paste it into the Embed Code box, and click <strong>Publish</strong>.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-navy-900/90 border border-navy-700 space-y-1.5">
+                  <p class="font-bold text-white">Option B: Host URL &amp; Embed Full-Screen</p>
+                  <p>1. Drag the downloaded <code class="text-sky-300">Salman_Welding_Workshop.html</code> file onto a free static host (e.g., Netlify Drop or GitHub Pages).</p>
+                  <p>2. In Google Sites, choose <strong>Insert &rarr; Embed &rarr; By URL</strong> and paste your live link for a full-screen Chromebook &amp; mobile app.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===============================================================
+               ADMIN TAB 5: ADMIN SECURITY (Change Admin ID & Password)
+               =============================================================== -->
+          <section id="tab-security" class="admin-tab-panel hidden max-w-xl space-y-6">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-white">Admin Security Settings</h2>
+              <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Update the Admin ID and Password required to unlock the workshop ledger from the public worker landing page</p>
+            </div>
+
+            <div class="bg-navy-850 rounded-2xl p-5 sm:p-6 border border-navy-700/90 shadow-lg">
+              <form id="adminSecurityForm" class="space-y-4">
+                <div>
+                  <label for="newAdminIdInput" class="block text-xs font-bold text-slate-300 mb-1">Admin ID *</label>
+                  <input type="text" id="newAdminIdInput" required class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                </div>
+                <div>
+                  <label for="newAdminPassInput" class="block text-xs font-bold text-slate-300 mb-1">New Admin Password *</label>
+                  <input type="password" id="newAdminPassInput" required placeholder="Enter new password" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                </div>
+                <div>
+                  <label for="confirmAdminPassInput" class="block text-xs font-bold text-slate-300 mb-1">Confirm Admin Password *</label>
+                  <input type="password" id="confirmAdminPassInput" required placeholder="Re-enter new password" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                </div>
+                <button type="submit" class="w-full min-h-[48px] px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-navy-950 font-extrabold text-sm shadow-md transition cursor-pointer">
+                  Update Admin Credentials
+                </button>
+              </form>
+            </div>
+          </section>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       UNIFIED 3-MODE WORKSHOP RECORD FORM TEMPLATE (Shared by Public & Admin)
+       ======================================================================= -->
+  <div id="sharedWorkshopFormContainer" class="hidden">
+    <div class="space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h3 class="text-lg sm:text-xl font-extrabold text-white">Log Workshop Record</h3>
+          <p class="text-xs text-slate-400">Select record mode below — saves immediately to workshop ledger &amp; Google Sheet</p>
+        </div>
+        <span class="text-xs font-bold px-3 py-1 rounded-full bg-navy-800 border border-navy-700 text-sky-300">Currency: ₦ NGN</span>
+      </div>
+
+      <!-- 3 Mode Selector Tabs -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 p-1.5 bg-navy-900 rounded-2xl border border-navy-700/90">
+        <button type="button" data-form-mode="job" class="form-mode-btn min-h-[46px] px-3 rounded-xl text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 bg-emerald-600 text-white shadow-md transition cursor-pointer">
+          <i data-lucide="wrench" class="w-4 h-4 shrink-0"></i>
+          <span>Log Job Income</span>
+        </button>
+        <button type="button" data-form-mode="labor" class="form-mode-btn min-h-[46px] px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-slate-300 hover:text-white hover:bg-navy-800 transition cursor-pointer">
+          <i data-lucide="hard-hat" class="w-4 h-4 text-amber-400 shrink-0"></i>
+          <span>Log Labor &amp; Food Fee</span>
+        </button>
+        <button type="button" data-form-mode="expense" class="form-mode-btn min-h-[46px] px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-slate-300 hover:text-white hover:bg-navy-800 transition cursor-pointer">
+          <i data-lucide="flame" class="w-4 h-4 text-rose-400 shrink-0"></i>
+          <span>Log Workshop Expense</span>
+        </button>
+      </div>
+
+      <!-- Unified Form -->
+      <form id="workshopRecordForm" class="space-y-4">
+        <input type="hidden" id="activeFormMode" value="job" />
+
+        <!-- ===============================================================
+             MODE A: LOG JOB INCOME
+             =============================================================== -->
+        <div id="modeFields-job" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="jobDate" class="block text-xs font-bold text-slate-300 mb-1">Date *</label>
+              <input type="date" id="jobDate" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            </div>
+            <div>
+              <label for="jobTicket" class="block text-xs font-bold text-slate-300 mb-1">Auto Job Ticket # *</label>
+              <input type="text" id="jobTicket" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm font-mono font-extrabold text-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="jobClientName" class="block text-xs font-bold text-slate-300 mb-1">Client Name *</label>
+              <input type="text" id="jobClientName" placeholder="e.g., Alhaji Musa Danjuma" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            </div>
+            <div>
+              <label for="jobClientPhone" class="block text-xs font-bold text-slate-300 mb-1">Client Phone</label>
+              <input type="tel" id="jobClientPhone" placeholder="e.g., 0803 456 7890" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="jobCategory" class="block text-xs font-bold text-slate-300 mb-1">Service Category *</label>
+              <select id="jobCategory" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <option value="Custom Fabrication / Welding">Custom Fabrication / Welding</option>
+                <option value="Repair & Servicing">Repair &amp; Servicing</option>
+                <option value="Gate / Burglary Proofing">Gate / Burglary Proofing</option>
+                <option value="Installation & Site Work">Installation &amp; Site Work</option>
+                <option value="Diagnostic / Cutting">Diagnostic / Cutting</option>
+              </select>
+            </div>
+            <div>
+              <label for="jobLoggedBy" class="block text-xs font-bold text-slate-300 mb-1">Worker / Staff Name Logging It *</label>
+              <input type="text" id="jobLoggedBy" placeholder="e.g., Ibrahim (Master Welder)" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+            </div>
+          </div>
+
+          <div>
+            <label for="jobDescription" class="block text-xs font-bold text-slate-300 mb-1">Equipment / Work Description *</label>
+            <input type="text" id="jobDescription" placeholder="e.g., Double-Leaf Sliding Steel Gate (16ft x 7ft) with spikes" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+          </div>
+
+          <!-- Pricing & Auto-Calculated Balance Due -->
+          <div class="p-4 rounded-2xl bg-navy-900/95 border border-navy-700 space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label for="jobAgreedPrice" class="block text-xs font-bold text-slate-300 mb-1">Agreed Price (₦) *</label>
+                <input type="number" id="jobAgreedPrice" min="0" step="100" placeholder="0" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-850 border border-navy-600 text-sm font-extrabold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+              </div>
+              <div>
+                <label for="jobPaidNow" class="block text-xs font-bold text-slate-300 mb-1">Amount Paid Now (₦) *</label>
+                <input type="number" id="jobPaidNow" min="0" step="100" placeholder="0" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-850 border border-navy-600 text-sm font-extrabold text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+              </div>
+              <div>
+                <label for="jobPaymentMethod" class="block text-xs font-bold text-slate-300 mb-1">Payment Method *</label>
+                <select id="jobPaymentMethod" class="w-full min-h-[44px] px-3 rounded-xl bg-navy-850 border border-navy-600 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                  <option value="Cash">Cash</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                  <option value="POS">POS</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-navy-700/80 text-xs">
+              <span class="text-slate-300 font-semibold">
+                Auto-Calculated Balance Due: <strong id="jobBalanceDueText" class="text-amber-300 text-sm font-extrabold ml-1">₦0.00</strong>
+              </span>
+              <span id="jobStatusPreviewBadge" class="px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Paid in Full
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <label for="jobNotes" class="block text-xs font-bold text-slate-300 mb-1">Notes (Optional)</label>
+            <textarea id="jobNotes" rows="2" placeholder="Delivery date, deposit terms, or special welding instructions..." class="w-full p-3 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             MODE B: LOG LABOR & FOOD FEE
+             =============================================================== -->
+        <div id="modeFields-labor" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="laborDate" class="block text-xs font-bold text-slate-300 mb-1">Date *</label>
+              <input type="date" id="laborDate" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+            <div>
+              <label for="laborWorkerSelect" class="block text-xs font-bold text-slate-300 mb-1">Select Registered Worker *</label>
+              <select id="laborWorkerSelect" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm font-bold text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="laborWorkerRole" class="block text-xs font-bold text-slate-300 mb-1">Worker Role (Auto-Fills)</label>
+              <input type="text" id="laborWorkerRole" readonly class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900/60 border border-navy-700 text-sm text-slate-300 cursor-not-allowed" />
+            </div>
+            <div>
+              <label for="laborPaymentMethod" class="block text-xs font-bold text-slate-300 mb-1">Payment Method *</label>
+              <select id="laborPaymentMethod" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="Cash">Cash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="POS">POS</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Daily Labor Fee & Food Fee Auto-Fill Card -->
+          <div class="p-4 rounded-2xl bg-navy-900/95 border border-amber-500/30 space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label for="laborDailyFee" class="block text-xs font-bold text-slate-300 mb-1">Daily Labor Fee (₦) *</label>
+                <input type="number" id="laborDailyFee" min="0" step="50" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-850 border border-navy-600 text-sm font-extrabold text-sky-300 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+              </div>
+              <div>
+                <label for="laborFoodFee" class="block text-xs font-bold text-slate-300 mb-1">Food Fee (₦) *</label>
+                <input type="number" id="laborFoodFee" min="0" step="50" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-850 border border-navy-600 text-sm font-extrabold text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2.5 border-t border-navy-700/80">
+              <span class="text-xs font-semibold text-slate-300">Total Worker Allowance (Daily + Food):</span>
+              <span id="laborTotalAllowanceText" class="text-base font-extrabold text-amber-400">₦0.00</span>
+            </div>
+          </div>
+
+          <div>
+            <label for="laborNotes" class="block text-xs font-bold text-slate-300 mb-1">Notes (Optional)</label>
+            <textarea id="laborNotes" rows="2" placeholder="e.g., Full day gate welding + lunch allowance..." class="w-full p-3 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             MODE C: LOG WORKSHOP EXPENSE
+             =============================================================== -->
+        <div id="modeFields-expense" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="expenseDate" class="block text-xs font-bold text-slate-300 mb-1">Date *</label>
+              <input type="date" id="expenseDate" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rose-500" />
+            </div>
+            <div>
+              <label for="expenseCategory" class="block text-xs font-bold text-slate-300 mb-1">Expense Category *</label>
+              <select id="expenseCategory" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rose-500">
+                <option value="Raw Materials & Steel">Raw Materials &amp; Steel</option>
+                <option value="Welding Rods & Gas">Welding Rods &amp; Gas</option>
+                <option value="Electricity / Diesel Fuel">Electricity / Diesel Fuel</option>
+                <option value="Workshop Tools & Grinding Discs">Workshop Tools &amp; Grinding Discs</option>
+                <option value="Transport & Logistics">Transport &amp; Logistics</option>
+                <option value="Other Expense">Other Expense</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="expenseVendor" class="block text-xs font-bold text-slate-300 mb-1">Supplier / Vendor *</label>
+              <input type="text" id="expenseVendor" placeholder="e.g., Kano Iron & Steel Market" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+            </div>
+            <div>
+              <label for="expenseItem" class="block text-xs font-bold text-slate-300 mb-1">Item Description *</label>
+              <input type="text" id="expenseItem" placeholder="e.g., 6 lengths of 2x2 angle iron & 2 packets G12 rods" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="expenseAmount" class="block text-xs font-bold text-slate-300 mb-1">Amount Paid (₦) *</label>
+              <input type="number" id="expenseAmount" min="1" step="50" placeholder="0" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm font-extrabold text-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+            </div>
+            <div>
+              <label for="expensePaymentMethod" class="block text-xs font-bold text-slate-300 mb-1">Payment Method *</label>
+              <select id="expensePaymentMethod" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rose-500">
+                <option value="Cash">Cash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="POS">POS</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="expenseNotes" class="block text-xs font-bold text-slate-300 mb-1">Notes (Optional)</label>
+            <textarea id="expenseNotes" rows="2" placeholder="Receipt number or job reference..." class="w-full p-3 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500"></textarea>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submitWorkshopRecordBtn" class="w-full min-h-[50px] px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-extrabold text-sm sm:text-base shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+          <span id="submitWorkshopBtnLabel">Submit Job Income Record</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       ADMIN LOGIN MODAL GATE
+       ======================================================================= -->
+  <div id="adminLoginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-navy-950/80 backdrop-blur-sm p-4">
+    <div class="bg-navy-850 w-full max-w-md rounded-3xl border border-sky-500/35 shadow-2xl p-6 sm:p-7 space-y-5">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-400/30 text-amber-400 flex items-center justify-center shrink-0">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-extrabold text-white">Admin Ledger Login</h3>
+            <p class="text-xs text-slate-400">SALMAN WELDING WORKSHOP</p>
+          </div>
+        </div>
+        <button type="button" id="closeAdminLoginModalBtn" class="w-10 h-10 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-300 flex items-center justify-center cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Discreet Setup Helper Box -->
+      <div class="p-3.5 rounded-2xl bg-navy-900/95 border border-sky-500/25 text-xs text-slate-300 space-y-1">
+        <p class="font-bold text-sky-300 flex items-center gap-1.5">
+          <i data-lucide="info" class="w-3.5 h-3.5"></i>
+          <span>Default Admin Credentials (Changeable inside Admin Security):</span>
+        </p>
+        <p>Admin ID: <code class="px-1.5 py-0.5 rounded bg-navy-800 text-amber-300 font-bold">SALMAN-ADMIN</code> &nbsp;|&nbsp; Password: <code class="px-1.5 py-0.5 rounded bg-navy-800 text-amber-300 font-bold">2026</code></p>
+      </div>
+
+      <form id="adminLoginForm" class="space-y-4">
+        <div>
+          <label for="loginAdminId" class="block text-xs font-bold text-slate-300 mb-1">Admin ID *</label>
+          <input type="text" id="loginAdminId" required placeholder="SALMAN-ADMIN" autocomplete="username" class="w-full min-h-[46px] px-4 rounded-xl bg-navy-900 border border-navy-700 text-sm font-bold text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+        </div>
+        <div>
+          <label for="loginAdminPassword" class="block text-xs font-bold text-slate-300 mb-1">Password *</label>
+          <input type="password" id="loginAdminPassword" required placeholder="••••" autocomplete="current-password" class="w-full min-h-[46px] px-4 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+        </div>
+        <p id="loginErrorMsg" class="hidden text-xs font-bold text-rose-400 bg-rose-950/60 border border-rose-500/40 px-3 py-2 rounded-xl">
+          Invalid Admin ID or Password. Please try again.
+        </p>
+        <button type="submit" class="w-full min-h-[48px] px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-950 font-extrabold text-sm shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="unlock" class="w-4 h-4"></i>
+          <span>Unlock Admin Dashboard</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       CUSTOM CONFIRMATION / SETTLE BALANCE MODAL & TOAST
+       ======================================================================= -->
+  <div id="customConfirmModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-navy-950/80 backdrop-blur-xs p-4">
+    <div class="bg-navy-850 w-full max-w-md rounded-2xl border border-navy-700 shadow-2xl p-6 space-y-4">
+      <div class="flex items-start gap-3">
+        <div class="p-2.5 rounded-xl bg-amber-500/15 text-amber-400 shrink-0">
+          <i data-lucide="alert-circle" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 id="confirmModalTitle" class="text-base font-extrabold text-white">Confirm Action</h4>
+          <p id="confirmModalText" class="text-xs sm:text-sm text-slate-300 mt-1"></p>
+          <div id="confirmModalBody" class="mt-3 hidden"></div>
+        </div>
+      </div>
+      <div id="confirmModalActions" class="flex flex-wrap items-center justify-end gap-2 pt-2"></div>
+    </div>
+  </div>
+
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-navy-800 text-white px-4 py-3 rounded-xl shadow-2xl border border-sky-500/40 flex items-center gap-2.5 text-xs sm:text-sm font-semibold">
+      <span id="toastDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+      <span id="toastText">Saved</span>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       FIREBASE + GOOGLE SHEETS SYNC + COMPLETE APPLICATION LOGIC
+       ======================================================================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // --- 1. Local Storage Keys & Defaults ---
+    const LS_RECORDS_KEY = 'salman_welding_records_v1';
+    const LS_WORKERS_KEY = 'salman_welding_workers_v1';
+    const LS_CONFIG_KEY = 'salman_welding_config_v1';
+
+    let records = [];
+    let workers = [];
+    let appConfig = {
+      adminId: 'SALMAN-ADMIN',
+      adminPassword: '2026',
+      googleSheetUrl: '',
+      googleWebAppUrl: ''
+    };
+
+    let isAdminLoggedIn = false;
+    let lastSubmittedRecord = null;
+    let incomeChartInstance = null;
+    let expenseChartInstance = null;
+
+    // Firebase State (Gracefully operates alongside LocalStorage + Google Sheets)
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'salman-welding-workshop';
+
+    // --- 2. Pre-Loaded Realistic Welding Workshop Sample Data ---
+    function getDefaultWorkers() {
+      return [
+        { id: 'wrk-1', name: 'Ibrahim Abdullahi', role: 'Master Welder', phone: '0803 441 9012', dailyFee: 6000, foodFee: 1500 },
+        { id: 'wrk-2', name: 'Sani Garba', role: 'Senior Fabricator', phone: '0806 219 3340', dailyFee: 5000, foodFee: 1500 },
+        { id: 'wrk-3', name: 'Tunde Adewale', role: 'Arc / MIG Welder', phone: '0705 882 1104', dailyFee: 4500, foodFee: 1200 },
+        { id: 'wrk-4', name: 'Musa Yusuf', role: 'Apprentice', phone: '0812 770 4491', dailyFee: 2000, foodFee: 1000 }
+      ];
+    }
+
+    function getDefaultRecords() {
+      const today = new Date();
+      const dayOffset = (d) => {
+        const dt = new Date(today);
+        dt.setDate(dt.getDate() - d);
+        return dt.toISOString().split('T')[0];
+      };
+
+      return [
+        {
+          id: 'rec-101',
+          mode: 'job',
+          date: dayOffset(0),
+          reference: 'JOB-1041',
+          clientName: 'Alhaji Bello Construction Ltd',
+          clientPhone: '0803 551 2290',
+          category: 'Gate / Burglary Proofing',
+          description: '18ft Automated Sliding Steel Gate & 8 Window Burglary Proofs',
+          agreedPrice: 450000,
+          paidAmount: 300000,
+          balanceDue: 150000,
+          paymentMethod: 'Bank Transfer',
+          loggedBy: 'Ibrahim Abdullahi',
+          notes: '65% mobilization deposit paid. Balance due on installation.'
+        },
+        {
+          id: 'rec-102',
+          mode: 'expense',
+          date: dayOffset(0),
+          reference: 'EXP-201',
+          category: 'Raw Materials & Steel',
+          vendor: 'Kano Iron & Steel Depot',
+          description: '10 lengths 2x2 galvanized pipes & 4mm mild steel plates',
+          paidAmount: 142000,
+          paymentMethod: 'Bank Transfer',
+          notes: 'Materials for JOB-1041 gate frame'
+        },
+        {
+          id: 'rec-103',
+          mode: 'labor',
+          date: dayOffset(0),
+          reference: 'LAB-301',
+          workerId: 'wrk-1',
+          workerName: 'Ibrahim Abdullahi',
+          workerRole: 'Master Welder',
+          dailyFee: 6000,
+          foodFee: 1500,
+          paidAmount: 7500,
+          paymentMethod: 'Cash',
+          notes: 'Full day gate frame fabrication & lunch allowance'
+        },
+        {
+          id: 'rec-104',
+          mode: 'labor',
+          date: dayOffset(0),
+          reference: 'LAB-302',
+          workerId: 'wrk-4',
+          workerName: 'Musa Yusuf',
+          workerRole: 'Apprentice',
+          dailyFee: 2000,
+          foodFee: 1000,
+          paidAmount: 3000,
+          paymentMethod: 'Cash',
+          notes: 'Grinding, surface prep & lunch fee'
+        },
+        {
+          id: 'rec-105',
+          mode: 'job',
+          date: dayOffset(1),
+          reference: 'JOB-1040',
+          clientName: 'Dr. Mrs. Amina Suleiman',
+          clientPhone: '0809 332 7781',
+          category: 'Custom Fabrication / Welding',
+          description: 'Heavy-Duty 3,000L Overhead Water Tank Stand (15ft Tower)',
+          agreedPrice: 220000,
+          paidAmount: 220000,
+          balanceDue: 0,
+          paymentMethod: 'Bank Transfer',
+          loggedBy: 'Sani Garba',
+          notes: 'Completed, anti-rust primed, and installed on site.'
+        },
+        {
+          id: 'rec-106',
+          mode: 'expense',
+          date: dayOffset(2),
+          reference: 'EXP-202',
+          category: 'Welding Rods & Gas',
+          vendor: 'Apex Industrial Gas & Tools',
+          description: '3 packets Gauge-12 welding electrodes & 15 cutting discs',
+          paidAmount: 28500,
+          paymentMethod: 'Cash',
+          notes: 'Workshop consumables restock'
+        }
+      ];
+    }
+
+    // --- 3. Formatting & Helper Utilities ---
+    function formatNaira(amount) {
+      const num = Number(amount) || 0;
+      return '₦' + num.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function esc(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getNextJobTicket() {
+      let max = 1041;
+      records.forEach((r) => {
+        const m = String(r.reference || '').match(/JOB-(\d+)/i);
+        if (m && parseInt(m[1], 10) > max) max = parseInt(m[1], 10);
+      });
+      return `JOB-${max + 1}`;
+    }
+
+    let toastTimer = null;
+    function showToast(message, isError = false) {
+      const el = document.getElementById('toastNotification');
+      const dot = document.getElementById('toastDot');
+      document.getElementById('toastText').textContent = message;
+      dot.className = `w-2.5 h-2.5 rounded-full shrink-0 ${isError ? 'bg-rose-400' : 'bg-emerald-400'}`;
+      el.classList.remove('translate-y-24', 'opacity-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.add('translate-y-24', 'opacity-0');
+      }, 3400);
+    }
+
+    function showConfirmModal({ title, message, customHTML = '', buttons = [] }) {
+      const modal = document.getElementById('customConfirmModal');
+      document.getElementById('confirmModalTitle').textContent = title;
+      document.getElementById('confirmModalText').textContent = message;
+
+      const body = document.getElementById('confirmModalBody');
+      if (customHTML) {
+        body.innerHTML = customHTML;
+        body.classList.remove('hidden');
+      } else {
+        body.innerHTML = '';
+        body.classList.add('hidden');
+      }
+
+      const actions = document.getElementById('confirmModalActions');
+      actions.innerHTML = '';
+      buttons.forEach((b) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = b.label;
+        btn.className = b.className;
+        btn.addEventListener('click', () => {
+          const close = b.onClick ? b.onClick() !== false : true;
+          if (close) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+          }
+        });
+        actions.appendChild(btn);
+      });
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    // --- 4. Storage Persistence (LocalStorage + Firestore + Google Sheets HTTP POST) ---
+    function loadLocalData() {
+      try {
+        const cfg = localStorage.getItem(LS_CONFIG_KEY);
+        if (cfg) appConfig = { ...appConfig, ...JSON.parse(cfg) };
+
+        const wrk = localStorage.getItem(LS_WORKERS_KEY);
+        workers = wrk ? JSON.parse(wrk) : getDefaultWorkers();
+        if (!wrk) localStorage.setItem(LS_WORKERS_KEY, JSON.stringify(workers));
+
+        const recs = localStorage.getItem(LS_RECORDS_KEY);
+        records = recs ? JSON.parse(recs) : getDefaultRecords();
+        if (!recs) localStorage.setItem(LS_RECORDS_KEY, JSON.stringify(records));
+      } catch (e) {
+        workers = getDefaultWorkers();
+        records = getDefaultRecords();
+      }
+    }
+
+    function saveLocalData() {
+      try {
+        localStorage.setItem(LS_RECORDS_KEY, JSON.stringify(records));
+        localStorage.setItem(LS_WORKERS_KEY, JSON.stringify(workers));
+        localStorage.setItem(LS_CONFIG_KEY, JSON.stringify(appConfig));
+      } catch (e) {}
+    }
+
+    async function initCloudDatabase() {
+      try {
+        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+          const firebaseConfig = JSON.parse(__firebase_config);
+          const app = initializeApp(firebaseConfig);
+          auth = getAuth(app);
+          db = getFirestore(app);
+
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+            await signInAnonymously(auth);
+          }
+
+          onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (!user) return;
+
+            // Subscribe to shared public workshop records
+            const recsRef = collection(db, 'artifacts', appId, 'public', 'data', 'salman_records');
+            onSnapshot(
+              recsRef,
+              (snap) => {
+                if (!snap.empty) {
+                  records = snap.docs.map((d) => d.data());
+                  saveLocalData();
+                  refreshAllUI();
+                }
+              },
+              (err) => console.warn('Firestore records listener:', err)
+            );
+
+            // Subscribe to shared workshop workers
+            const wrkRef = collection(db, 'artifacts', appId, 'public', 'data', 'salman_workers');
+            onSnapshot(
+              wrkRef,
+              (snap) => {
+                if (!snap.empty) {
+                  workers = snap.docs.map((d) => d.data());
+                  saveLocalData();
+                  refreshAllUI();
+                }
+              },
+              (err) => console.warn('Firestore workers listener:', err)
+            );
+          });
+        }
+      } catch (e) {
+        console.warn('Running in offline/Google Sheets mode:', e);
+      }
+    }
+
+    async function syncRecordToCloud(record) {
+      // 1. Save to Firestore if initialized
+      if (db && currentUser) {
+        try {
+          await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'salman_records', record.id), record);
+        } catch (e) {}
+      }
+
+      // 2. Push HTTP POST to Google Apps Script Web App URL (Google Sheet in Google Drive)
+      const webAppUrl = (appConfig.googleWebAppUrl || '').trim();
+      if (!webAppUrl) {
+        return { syncedToSheet: false, message: 'Saved locally. Connect Google Apps Script URL in Admin Setup for live Google Sheet sync.' };
+      }
+
+      try {
+        await fetch(webAppUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'upsertRecord',
+            workshop: 'SALMAN WELDING WORKSHOP',
+            record
+          })
+        });
+        return { syncedToSheet: true, message: 'Automatically pushed to Salman Welding Workshop Google Sheet!' };
+      } catch (err) {
+        console.error('Google Sheet sync error:', err);
+        return { syncedToSheet: false, message: 'Saved locally (Google Sheet will sync when online).' };
+      }
+    }
+
+    async function syncWorkerToCloud(worker, isDelete = false) {
+      if (db && currentUser) {
+        try {
+          const ref = doc(db, 'artifacts', appId, 'public', 'data', 'salman_workers', worker.id);
+          if (isDelete) await deleteDoc(ref);
+          else await setDoc(ref, worker);
+        } catch (e) {}
+      }
+
+      const webAppUrl = (appConfig.googleWebAppUrl || '').trim();
+      if (!webAppUrl) return;
+      try {
+        await fetch(webAppUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: isDelete ? 'deleteWorker' : 'upsertWorker',
+            workshop: 'SALMAN WELDING WORKSHOP',
+            worker
+          })
+        });
+      } catch (e) {}
+    }
+
+    async function syncAllDataToGoogleSheet() {
+      const webAppUrl = (appConfig.googleWebAppUrl || '').trim();
+      if (!webAppUrl) {
+        showToast('Please enter your Google Apps Script Web App URL first.', true);
+        return;
+      }
+      try {
+        await fetch(webAppUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'syncAll',
+            workshop: 'SALMAN WELDING WORKSHOP',
+            records,
+            workers
+          })
+        });
+        showToast(`Synced ${records.length} records & ${workers.length} workers to Google Sheet!`);
+      } catch (err) {
+        showToast('Network error while syncing to Google Sheet.', true);
+      }
+    }
+
+    function updateSyncIndicators() {
+      const isConnected = Boolean((appConfig.googleWebAppUrl || '').trim());
+      const pubBadge = document.getElementById('publicSyncBadge');
+      const pubDot = document.getElementById('publicSyncDot');
+      const pubText = document.getElementById('publicSyncText');
+
+      const admDot = document.getElementById('adminSyncDot');
+      const admLabel = document.getElementById('adminSyncLabel');
+
+      if (isConnected) {
+        pubBadge.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300';
+        pubDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
+        pubText.textContent = 'Google Sheet Live';
+
+        admDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0';
+        admLabel.textContent = 'Google Sheet: Live Sync';
+      } else {
+        pubBadge.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-navy-800 border border-navy-700 text-amber-300';
+        pubDot.className = 'w-1.5 h-1.5 rounded-full bg-amber-400';
+        pubText.textContent = 'Local + Sheet Ready';
+
+        admDot.className = 'w-2 h-2 rounded-full bg-amber-400 shrink-0';
+        admLabel.textContent = 'Sheet URL Not Linked';
+      }
+
+      const openSheetLink = document.getElementById('openConnectedSheetLink');
+      if (appConfig.googleSheetUrl) {
+        openSheetLink.href = appConfig.googleSheetUrl;
+        openSheetLink.classList.remove('hidden');
+      } else {
+        openSheetLink.classList.add('hidden');
+      }
+    }
+
+    // --- 5. Unified 3-Mode Workshop Form Management ---
+    function mountSharedForm(targetContainerId) {
+      const formWrapper = document.getElementById('sharedWorkshopFormContainer');
+      const target = document.getElementById(targetContainerId);
+      if (formWrapper && target) {
+        formWrapper.classList.remove('hidden');
+        target.appendChild(formWrapper);
+      }
+    }
+
+    function switchFormMode(mode) {
+      document.getElementById('activeFormMode').value = mode;
+
+      // Update Tab Pills
+      document.querySelectorAll('.form-mode-btn').forEach((btn) => {
+        const isCurrent = btn.dataset.formMode === mode;
+        if (isCurrent) {
+          const activeBg =
+            mode === 'job'
+              ? 'bg-emerald-600 text-white'
+              : mode === 'labor'
+              ? 'bg-amber-500 text-navy-950'
+              : 'bg-rose-600 text-white';
+          btn.className = `form-mode-btn min-h-[46px] px-3 rounded-xl text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 ${activeBg} shadow-md transition cursor-pointer`;
+        } else {
+          btn.className =
+            'form-mode-btn min-h-[46px] px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-slate-300 hover:text-white hover:bg-navy-800 transition cursor-pointer';
+        }
+      });
+
+      // Toggle Form Field Groups
+      document.getElementById('modeFields-job').classList.toggle('hidden', mode !== 'job');
+      document.getElementById('modeFields-labor').classList.toggle('hidden', mode !== 'labor');
+      document.getElementById('modeFields-expense').classList.toggle('hidden', mode !== 'expense');
+
+      // Update Submit Button Appearance
+      const submitBtn = document.getElementById('submitWorkshopRecordBtn');
+      const submitLabel = document.getElementById('submitWorkshopBtnLabel');
+      if (mode === 'job') {
+        submitBtn.className =
+          'w-full min-h-[50px] px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-extrabold text-sm sm:text-base shadow-lg transition flex items-center justify-center gap-2 cursor-pointer';
+        submitLabel.textContent = 'Submit Job Income Record';
+      } else if (mode === 'labor') {
+        submitBtn.className =
+          'w-full min-h-[50px] px-5 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-navy-950 font-extrabold text-sm sm:text-base shadow-lg transition flex items-center justify-center gap-2 cursor-pointer';
+        submitLabel.textContent = 'Submit Worker Labor & Food Fee';
+      } else {
+        submitBtn.className =
+          'w-full min-h-[50px] px-5 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-[0.99] text-white font-extrabold text-sm sm:text-base shadow-lg transition flex items-center justify-center gap-2 cursor-pointer';
+        submitLabel.textContent = 'Submit Workshop Expense';
+      }
+    }
+
+    function populateWorkerDropdown() {
+      const sel = document.getElementById('laborWorkerSelect');
+      sel.innerHTML = '';
+      if (workers.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'No registered workers (Admin must add workers)';
+        sel.appendChild(opt);
+        document.getElementById('laborWorkerRole').value = '';
+        document.getElementById('laborDailyFee').value = 0;
+        document.getElementById('laborFoodFee').value = 0;
+        updateLaborTotalPreview();
+        return;
+      }
+
+      workers.forEach((w) => {
+        const opt = document.createElement('option');
+        opt.value = w.id;
+        opt.textContent = `${w.name} (${w.role})`;
+        sel.appendChild(opt);
+      });
+      handleWorkerSelectionChange();
+    }
+
+    function handleWorkerSelectionChange() {
+      const workerId = document.getElementById('laborWorkerSelect').value;
+      const w = workers.find((item) => item.id === workerId);
+      if (w) {
+        document.getElementById('laborWorkerRole').value = w.role;
+        document.getElementById('laborDailyFee').value = w.dailyFee;
+        document.getElementById('laborFoodFee').value = w.foodFee;
+      }
+      updateLaborTotalPreview();
+    }
+
+    function updateJobBalancePreview() {
+      const agreed = parseFloat(document.getElementById('jobAgreedPrice').value) || 0;
+      const paid = parseFloat(document.getElementById('jobPaidNow').value) || 0;
+      const balance = Math.max(0, agreed - paid);
+
+      document.getElementById('jobBalanceDueText').textContent = formatNaira(balance);
+      const badge = document.getElementById('jobStatusPreviewBadge');
+
+      if (agreed <= 0 && paid <= 0) {
+        badge.className = 'px-2.5 py-1 rounded-full font-bold bg-navy-800 text-slate-300 border border-navy-700';
+        badge.textContent = 'Enter Job Price';
+      } else if (balance <= 0) {
+        badge.className = 'px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        badge.textContent = 'Paid in Full';
+      } else if (paid > 0) {
+        badge.className = 'px-2.5 py-1 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        badge.textContent = 'Deposit / Partial Payment';
+      } else {
+        badge.className = 'px-2.5 py-1 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+        badge.textContent = 'Unpaid Balance';
+      }
+    }
+
+    function updateLaborTotalPreview() {
+      const daily = parseFloat(document.getElementById('laborDailyFee').value) || 0;
+      const food = parseFloat(document.getElementById('laborFoodFee').value) || 0;
+      document.getElementById('laborTotalAllowanceText').textContent = formatNaira(daily + food);
+    }
+
+    function resetWorkshopFormFields() {
+      const todayStr = new Date().toISOString().split('T')[0];
+      document.getElementById('workshopRecordForm').reset();
+      document.getElementById('jobDate').value = todayStr;
+      document.getElementById('laborDate').value = todayStr;
+      document.getElementById('expenseDate').value = todayStr;
+      document.getElementById('jobTicket').value = getNextJobTicket();
+      populateWorkerDropdown();
+      updateJobBalancePreview();
+      updateLaborTotalPreview();
+    }
+
+    // --- 6. Printable Slip / Receipt Generator ---
+    function printRecordSlip(record) {
+      if (!record) return;
+      const box = document.getElementById('printSlipContainer');
+
+      let bodyDetails = '';
+      if (record.mode === 'job') {
+        bodyDetails = `
+          <div class="grid grid-cols-2 gap-3 text-xs border-b border-slate-300 pb-3">
+            <div><span class="text-slate-500 block font-bold uppercase">Client Name</span><strong class="text-sm">${esc(record.clientName)}</strong></div>
+            <div><span class="text-slate-500 block font-bold uppercase">Service Category</span><strong>${esc(record.category)}</strong></div>
+            <div><span class="text-slate-500 block font-bold uppercase">Client Phone</span><span>${esc(record.clientPhone || 'N/A')}</span></div>
+            <div><span class="text-slate-500 block font-bold uppercase">Logged By</span><span>${esc(record.loggedBy)}</span></div>
+          </div>
+          <div class="py-3 border-b border-slate-300 text-xs">
+            <span class="text-slate-500 block font-bold uppercase">Work / Equipment Description</span>
+            <p class="text-sm font-bold mt-1">${esc(record.description)}</p>
+          </div>
+          <div class="py-3 space-y-1.5 text-sm">
+            <div class="flex justify-between"><span>Agreed Job Price:</span><strong>${formatNaira(record.agreedPrice)}</strong></div>
+            <div class="flex justify-between text-emerald-700"><span>Amount Paid Now (${esc(record.paymentMethod)}):</span><strong>${formatNaira(record.paidAmount)}</strong></div>
+            <div class="flex justify-between text-base font-extrabold border-t border-slate-900 pt-2">
+              <span>Balance Due:</span><span>${formatNaira(record.balanceDue)}</span>
+            </div>
+          </div>
+        `;
+      } else if (record.mode === 'labor') {
+        bodyDetails = `
+          <div class="grid grid-cols-2 gap-3 text-xs border-b border-slate-300 pb-3">
+            <div><span class="text-slate-500 block font-bold uppercase">Worker Name</span><strong class="text-sm">${esc(record.workerName)}</strong></div>
+            <div><span class="text-slate-500 block font-bold uppercase">Workshop Role</span><strong>${esc(record.workerRole)}</strong></div>
+          </div>
+          <div class="py-3 space-y-1.5 text-sm">
+            <div class="flex justify-between"><span>Daily Labor Fee:</span><strong>${formatNaira(record.dailyFee)}</strong></div>
+            <div class="flex justify-between"><span>Daily Food Fee:</span><strong>${formatNaira(record.foodFee)}</strong></div>
+            <div class="flex justify-between text-base font-extrabold border-t border-slate-900 pt-2">
+              <span>Total Allowance Paid (${esc(record.paymentMethod)}):</span><span>${formatNaira(record.paidAmount)}</span>
+            </div>
+          </div>
+        `;
+      } else {
+        bodyDetails = `
+          <div class="grid grid-cols-2 gap-3 text-xs border-b border-slate-300 pb-3">
+            <div><span class="text-slate-500 block font-bold uppercase">Expense Category</span><strong class="text-sm">${esc(record.category)}</strong></div>
+            <div><span class="text-slate-500 block font-bold uppercase">Supplier / Vendor</span><strong>${esc(record.vendor)}</strong></div>
+          </div>
+          <div class="py-3 border-b border-slate-300 text-xs">
+            <span class="text-slate-500 block font-bold uppercase">Item Description</span>
+            <p class="text-sm font-bold mt-1">${esc(record.description)}</p>
+          </div>
+          <div class="py-3 text-base font-extrabold flex justify-between">
+            <span>Total Expense Paid (${esc(record.paymentMethod)}):</span>
+            <span>${formatNaira(record.paidAmount)}</span>
+          </div>
+        `;
+      }
+
+      box.innerHTML = `
+        <div class="border-2 border-slate-900 rounded-2xl p-6 space-y-4">
+          <div class="flex items-start justify-between border-b-2 border-slate-900 pb-3">
+            <div>
+              <h2 class="text-lg font-extrabold uppercase tracking-tight">SALMAN WELDING WORKSHOP</h2>
+              <p class="text-xs text-slate-600">Official Workshop Record &amp; Payment Slip</p>
+            </div>
+            <div class="text-right">
+              <span class="px-2.5 py-1 bg-slate-900 text-white font-mono text-xs font-bold rounded">${esc(record.reference)}</span>
+              <p class="text-xs text-slate-600 mt-1">Date: ${esc(record.date)}</p>
+            </div>
+          </div>
+          ${bodyDetails}
+          ${record.notes ? `<div class="text-xs text-slate-600 pt-1"><strong>Notes:</strong> ${esc(record.notes)}</div>` : ''}
+          <div class="pt-6 flex justify-between text-[11px] text-slate-500 border-t border-dashed border-slate-400">
+            <span>Workshop Authorized Sign</span>
+            <span>Recipient / Client Sign</span>
+          </div>
+        </div>
+      `;
+
+      window.print();
+    }
+
+    // --- 7. Admin Portal Rendering (KPIs, Charts, Ledger, Workers) ---
+    function renderAdminDashboard() {
+      let totalIncome = 0;
+      let totalExpenses = 0;
+      let totalLaborFood = 0;
+      let pendingBalances = 0;
+      let pendingCount = 0;
+
+      records.forEach((r) => {
+        if (r.mode === 'job') {
+          totalIncome += Number(r.paidAmount) || 0;
+          const bal = Number(r.balanceDue) || 0;
+          if (bal > 0) {
+            pendingBalances += bal;
+            pendingCount++;
+          }
+        } else if (r.mode === 'labor') {
+          totalLaborFood += Number(r.paidAmount) || 0;
+        } else if (r.mode === 'expense') {
+          totalExpenses += Number(r.paidAmount) || 0;
+        }
+      });
+
+      const netProfit = totalIncome - (totalExpenses + totalLaborFood);
+
+      document.getElementById('kpiTotalIncome').textContent = formatNaira(totalIncome);
+      document.getElementById('kpiTotalExpenses').textContent = formatNaira(totalExpenses);
+      document.getElementById('kpiLaborFoodCost').textContent = formatNaira(totalLaborFood);
+
+      const netEl = document.getElementById('kpiNetProfit');
+      netEl.textContent = formatNaira(netProfit);
+      netEl.className = `text-xl sm:text-2xl font-extrabold mt-3 truncate ${
+        netProfit >= 0 ? 'text-sky-300' : 'text-rose-400'
+      }`;
+
+      document.getElementById('kpiPendingBalances').textContent = formatNaira(pendingBalances);
+      document.getElementById('kpiPendingSub').textContent = `${pendingCount} job${pendingCount === 1 ? '' : 's'} with unpaid balance`;
+
+      renderAdminCharts();
+      renderAdminLedgerTable();
+    }
+
+    function renderAdminCharts() {
+      // 1. Income vs Outcome Bar Chart
+      const ctx1 = document.getElementById('incomeVsOutcomeChart').getContext('2d');
+      if (incomeChartInstance) incomeChartInstance.destroy();
+
+      const byDate = {};
+      records.forEach((r) => {
+        if (!byDate[r.date]) byDate[r.date] = { income: 0, outcome: 0 };
+        if (r.mode === 'job') byDate[r.date].income += Number(r.paidAmount) || 0;
+        else byDate[r.date].outcome += Number(r.paidAmount) || 0;
+      });
+
+      const dates = Object.keys(byDate).sort();
+      const labels = dates.map((d) =>
+        new Date(d + 'T00:00:00').toLocaleDateString('en-NG', { month: 'short', day: 'numeric' })
+      );
+
+      incomeChartInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: labels.length ? labels : ['No Data'],
+          datasets: [
+            {
+              label: 'Collected Job Income (₦)',
+              data: dates.length ? dates.map((d) => byDate[d].income) : [0],
+              backgroundColor: '#10b981',
+              borderRadius: 6
+            },
+            {
+              label: 'Expenses + Labor & Food (₦)',
+              data: dates.length ? dates.map((d) => byDate[d].outcome) : [0],
+              backgroundColor: '#f43f5e',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { family: 'Inter', size: 11 } } }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: '#94a3b8',
+                callback: (v) => '₦' + Number(v).toLocaleString()
+              },
+              grid: { color: '#1E3E62' }
+            }
+          }
+        }
+      });
+
+      // 2. Expense & Labor Breakdown Doughnut Chart
+      const ctx2 = document.getElementById('expenseBreakdownChart').getContext('2d');
+      if (expenseChartInstance) expenseChartInstance.destroy();
+
+      const breakdown = {};
+      records.forEach((r) => {
+        if (r.mode === 'labor') {
+          breakdown['Workers Daily Labor Fee'] = (breakdown['Workers Daily Labor Fee'] || 0) + (Number(r.dailyFee) || 0);
+          breakdown['Workers Food Fee'] = (breakdown['Workers Food Fee'] || 0) + (Number(r.foodFee) || 0);
+        } else if (r.mode === 'expense') {
+          breakdown[r.category] = (breakdown[r.category] || 0) + (Number(r.paidAmount) || 0);
+        }
+      });
+
+      const entries = Object.entries(breakdown).filter((e) => e[1] > 0);
+      const colors = ['#f59e0b', '#38bdf8', '#f43f5e', '#a855f7', '#14b8a6', '#6366f1', '#ec4899'];
+
+      expenseChartInstance = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: entries.length ? entries.map((e) => e[0]) : ['No Outflows Yet'],
+          datasets: [
+            {
+              data: entries.length ? entries.map((e) => e[1]) : [1],
+              backgroundColor: entries.length ? entries.map((_, i) => colors[i % colors.length]) : ['#1E3E62'],
+              borderColor: '#0B192C',
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { color: '#cbd5e1', boxWidth: 10, font: { family: 'Inter', size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderAdminLedgerTable() {
+      const q = document.getElementById('adminSearchInput').value.trim().toLowerCase();
+      const typeFilter = document.getElementById('adminTypeFilter').value;
+
+      const filtered = records
+        .filter((r) => {
+          if (typeFilter === 'job' && r.mode !== 'job') return false;
+          if (typeFilter === 'labor' && r.mode !== 'labor') return false;
+          if (typeFilter === 'expense' && r.mode !== 'expense') return false;
+          if (typeFilter === 'unpaid' && !(r.mode === 'job' && (Number(r.balanceDue) || 0) > 0)) return false;
+
+          if (q) {
+            const text = `${r.reference} ${r.date} ${r.clientName || ''} ${r.workerName || ''} ${r.vendor || ''} ${r.category || ''} ${r.description || ''} ${r.notes || ''}`.toLowerCase();
+            if (!text.includes(q)) return false;
+          }
+          return true;
+        })
+        .sort((a, b) => b.date.localeCompare(a.date));
+
+      document.getElementById('ledgerVisibleCount').textContent = filtered.length;
+      document.getElementById('ledgerTotalCount').textContent = records.length;
+
+      const tbody = document.getElementById('adminLedgerTableBody');
+      const mobileCards = document.getElementById('adminLedgerMobileCards');
+      const emptyBox = document.getElementById('adminLedgerEmpty');
+
+      tbody.innerHTML = '';
+      mobileCards.innerHTML = '';
+
+      if (filtered.length === 0) {
+        emptyBox.classList.remove('hidden');
+        return;
+      }
+      emptyBox.classList.add('hidden');
+
+      filtered.forEach((r) => {
+        const isJob = r.mode === 'job';
+        const isLabor = r.mode === 'labor';
+        const bal = Number(r.balanceDue) || 0;
+
+        let typeBadge = '';
+        let titleText = '';
+        let subText = '';
+        let statusHTML = '';
+
+        if (isJob) {
+          typeBadge = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Job Income</span>`;
+          titleText = esc(r.clientName);
+          subText = `${esc(r.description)} • Logged by ${esc(r.loggedBy)}`;
+          statusHTML =
+            bal > 0
+              ? `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">Bal: ${formatNaira(bal)}</span>`
+              : `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-300">Paid in Full</span>`;
+        } else if (isLabor) {
+          typeBadge = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">Labor &amp; Food</span>`;
+          titleText = `${esc(r.workerName)} (${esc(r.workerRole)})`;
+          subText = `Daily Fee: ${formatNaira(r.dailyFee)} + Food Fee: ${formatNaira(r.foodFee)}`;
+          statusHTML = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-navy-800 text-slate-300">${esc(r.paymentMethod)}</span>`;
+        } else {
+          typeBadge = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30">Expense</span>`;
+          titleText = `${esc(r.vendor)} — ${esc(r.category)}`;
+          subText = esc(r.description);
+          statusHTML = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-navy-800 text-slate-300">${esc(r.paymentMethod)}</span>`;
+        }
+
+        const amountColor = isJob ? 'text-emerald-400' : isLabor ? 'text-amber-400' : 'text-rose-400';
+        const amountPrefix = isJob ? '+' : '-';
+
+        // Desktop Row
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-navy-800/60 transition';
+        tr.innerHTML = `
+          <td class="py-3.5 px-4 whitespace-nowrap align-top">
+            <span class="font-mono text-xs font-extrabold px-2 py-0.5 rounded bg-navy-900 text-sky-300 border border-navy-700">${esc(r.reference)}</span>
+            <div class="text-xs text-slate-400 mt-1">${esc(r.date)}</div>
+          </td>
+          <td class="py-3.5 px-3 whitespace-nowrap align-top">
+            ${typeBadge}
+            <div class="text-[11px] text-slate-400 mt-1">${esc(r.category || (isLabor ? 'Worker Allowance' : ''))}</div>
+          </td>
+          <td class="py-3.5 px-3 max-w-xs align-top">
+            <div class="font-bold text-white truncate">${titleText}</div>
+            <div class="text-xs text-slate-400 truncate mt-0.5">${subText}</div>
+          </td>
+          <td class="py-3.5 px-3 whitespace-nowrap align-top">
+            ${statusHTML}
+            ${
+              isJob && bal > 0
+                ? `<div class="mt-1.5">
+                    <button type="button" data-ledger-action="settle" data-id="${r.id}" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-navy-950 font-extrabold text-[11px] transition cursor-pointer">
+                      Mark Balance Paid
+                    </button>
+                  </div>`
+                : ''
+            }
+          </td>
+          <td class="py-3.5 px-4 whitespace-nowrap text-right align-top">
+            <div class="font-extrabold ${amountColor}">${amountPrefix}${formatNaira(r.paidAmount)}</div>
+            ${isJob && bal > 0 ? `<div class="text-[11px] text-slate-400">of ${formatNaira(r.agreedPrice)}</div>` : ''}
+          </td>
+          <td class="py-3.5 px-4 whitespace-nowrap text-right align-top">
+            <div class="inline-flex items-center gap-1">
+              <button type="button" data-ledger-action="print" data-id="${r.id}" title="Print Receipt" class="w-8 h-8 rounded-lg bg-navy-800 hover:bg-navy-700 text-sky-300 inline-flex items-center justify-center transition cursor-pointer">
+                <i data-lucide="printer" class="w-4 h-4 pointer-events-none"></i>
+              </button>
+              <button type="button" data-ledger-action="delete" data-id="${r.id}" title="Delete Record" class="w-8 h-8 rounded-lg bg-navy-800 hover:bg-rose-900 text-rose-300 inline-flex items-center justify-center transition cursor-pointer">
+                <i data-lucide="trash-2" class="w-4 h-4 pointer-events-none"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        // Mobile Card
+        const card = document.createElement('div');
+        card.className = 'p-4 space-y-2.5';
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-mono text-[11px] font-extrabold px-2 py-0.5 rounded bg-navy-900 text-sky-300 border border-navy-700">${esc(r.reference)}</span>
+                ${typeBadge}
+              </div>
+              <h4 class="text-sm font-bold text-white mt-1.5 truncate">${titleText}</h4>
+              <p class="text-xs text-slate-400 mt-0.5">${subText}</p>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="text-sm font-extrabold ${amountColor}">${amountPrefix}${formatNaira(r.paidAmount)}</div>
+              <div class="text-[11px] text-slate-400 mt-0.5">${esc(r.date)}</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+            <div>${statusHTML}</div>
+            <div class="flex items-center gap-1.5">
+              ${
+                isJob && bal > 0
+                  ? `<button type="button" data-ledger-action="settle" data-id="${r.id}" class="px-3 min-h-[36px] rounded-xl bg-amber-500 text-navy-950 font-extrabold text-xs cursor-pointer">Mark Balance Paid</button>`
+                  : ''
+              }
+              <button type="button" data-ledger-action="print" data-id="${r.id}" class="w-9 h-9 rounded-xl bg-navy-800 text-sky-300 flex items-center justify-center cursor-pointer">
+                <i data-lucide="printer" class="w-4 h-4 pointer-events-none"></i>
+              </button>
+              <button type="button" data-ledger-action="delete" data-id="${r.id}" class="w-9 h-9 rounded-xl bg-navy-800 text-rose-300 flex items-center justify-center cursor-pointer">
+                <i data-lucide="trash-2" class="w-4 h-4 pointer-events-none"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        mobileCards.appendChild(card);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function renderWorkersDirectory() {
+      document.getElementById('sidebarWorkersCount').textContent = workers.length;
+      const list = document.getElementById('workersListContainer');
+      list.innerHTML = '';
+
+      if (workers.length === 0) {
+        list.innerHTML = `
+          <div class="p-8 text-center text-xs text-slate-400">
+            No workers registered yet. Add a workshop worker on the left so they appear in the Labor &amp; Food Fee dropdown.
+          </div>
+        `;
+        return;
+      }
+
+      workers.forEach((w) => {
+        // Compute total labor & food paid to this worker
+        let totalLaborPaid = 0;
+        let totalFoodPaid = 0;
+        records.forEach((r) => {
+          if (r.mode === 'labor' && (r.workerId === w.id || r.workerName === w.name)) {
+            totalLaborPaid += Number(r.dailyFee) || 0;
+            totalFoodPaid += Number(r.foodFee) || 0;
+          }
+        });
+
+        const item = document.createElement('div');
+        item.className = 'p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-navy-800/40 transition';
+        item.innerHTML = `
+          <div class="space-y-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h4 class="text-sm sm:text-base font-extrabold text-white">${esc(w.name)}</h4>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">${esc(w.role)}</span>
+            </div>
+            <p class="text-xs text-slate-400">
+              Default Rates: <strong class="text-sky-300">Daily ${formatNaira(w.dailyFee)}</strong> + <strong class="text-amber-300">Food ${formatNaira(w.foodFee)}</strong>
+              ${w.phone ? ` • Tel: ${esc(w.phone)}` : ''}
+            </p>
+            <p class="text-xs text-slate-300 pt-0.5">
+              Total Paid to Date: <strong class="text-emerald-400">${formatNaira(totalLaborPaid + totalFoodPaid)}</strong>
+              <span class="text-slate-400">(Labor: ${formatNaira(totalLaborPaid)} | Food: ${formatNaira(totalFoodPaid)})</span>
+            </p>
+          </div>
+
+          <button type="button" data-remove-worker="${w.id}" class="self-start sm:self-center inline-flex items-center gap-1.5 px-3.5 min-h-[40px] rounded-xl bg-rose-950/70 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-700/50 text-xs font-bold transition shrink-0 cursor-pointer">
+            <i data-lucide="user-minus" class="w-4 h-4 pointer-events-none"></i>
+            <span>Remove Worker</span>
+          </button>
+        `;
+        list.appendChild(item);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function refreshAllUI() {
+      updateSyncIndicators();
+      populateWorkerDropdown();
+      renderWorkersDirectory();
+      if (isAdminLoggedIn) {
+        renderAdminDashboard();
+      }
+    }
+
+    // --- 8. Google Apps Script Auto-Generator Code ---
+    const GOOGLE_APPS_SCRIPT_TEMPLATE = `/**
+ * SALMAN WELDING WORKSHOP LEDGER — Google Sheets Auto-Backend
+ * Automatically creates 'Master_Ledger' and 'Workers' tabs in your Google Sheet
+ * and saves every Job Income, Labor & Food Fee, and Workshop Expense live.
+ */
+function doPost(e) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var payload = JSON.parse(e.postData.contents);
+    var action = payload.action || 'upsertRecord';
+
+    var ledgerSheet = getOrCreateSheet(ss, 'Master_Ledger', [
+      'Record ID', 'Date', 'Reference #', 'Mode / Type', 'Category',
+      'Client / Worker / Vendor', 'Phone', 'Description',
+      'Agreed Price (NGN)', 'Daily Labor Fee (NGN)', 'Food Fee (NGN)',
+      'Total Paid (NGN)', 'Balance Due (NGN)', 'Payment Method', 'Logged By', 'Notes'
+    ]);
+
+    var workerSheet = getOrCreateSheet(ss, 'Workers', [
+      'Worker ID', 'Full Name', 'Workshop Role', 'Phone', 'Default Daily Fee (NGN)', 'Default Food Fee (NGN)'
+    ]);
+
+    if (action === 'upsertRecord' && payload.record) {
+      upsertRowById(ledgerSheet, payload.record.id, formatRecordRow(payload.record));
+    } else if (action === 'upsertWorker' && payload.worker) {
+      upsertRowById(workerSheet, payload.worker.id, formatWorkerRow(payload.worker));
+    } else if (action === 'syncAll') {
+      if (Array.isArray(payload.records)) {
+        payload.records.forEach(function(r) {
+          upsertRowById(ledgerSheet, r.id, formatRecordRow(r));
+        });
+      }
+      if (Array.isArray(payload.workers)) {
+        payload.workers.forEach(function(w) {
+          upsertRowById(workerSheet, w.id, formatWorkerRow(w));
+        });
+      }
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  return ContentService.createTextOutput('SALMAN WELDING WORKSHOP LEDGER API is Active!')
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
+function getOrCreateSheet(ss, name, headers) {
+  var sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold').setBackground('#0B192C').setFontColor('#FFFFFF');
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function upsertRowById(sheet, id, rowValues) {
+  var data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === String(id)) {
+      sheet.getRange(i + 1, 1, 1, rowValues.length).setValues([rowValues]);
+      return;
+    }
+  }
+  sheet.appendRow(rowValues);
+}
+
+function formatRecordRow(r) {
+  var party = r.mode === 'job' ? r.clientName : (r.mode === 'labor' ? r.workerName : r.vendor);
+  return [
+    r.id, r.date, r.reference, r.mode.toUpperCase(), r.category || r.workerRole || '',
+    party || '', r.clientPhone || '', r.description || '',
+    r.agreedPrice || 0, r.dailyFee || 0, r.foodFee || 0,
+    r.paidAmount || 0, r.balanceDue || 0, r.paymentMethod || '', r.loggedBy || '', r.notes || ''
+  ];
+}
+
+function formatWorkerRow(w) {
+  return [w.id, w.name, w.role, w.phone || '', w.dailyFee || 0, w.foodFee || 0];
+}`;
+
+    // --- 9. Event Listeners & Application Boot ---
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLocalData();
+      initCloudDatabase();
+
+      // Mount Shared Form to Public Landing Page initially
+      mountSharedForm('publicFormMount');
+      resetWorkshopFormFields();
+      switchFormMode('job');
+
+      // Populate Google Setup Fields & Apps Script Code
+      document.getElementById('googleSheetUrlInput').value = appConfig.googleSheetUrl || '';
+      document.getElementById('googleWebAppUrlInput').value = appConfig.googleWebAppUrl || '';
+      document.getElementById('newAdminIdInput').value = appConfig.adminId || 'SALMAN-ADMIN';
+      document.getElementById('appsScriptCodeBlock').textContent = GOOGLE_APPS_SCRIPT_TEMPLATE;
+
+      refreshAllUI();
+      if (window.lucide) window.lucide.createIcons();
+
+      // Form Mode Switchers
+      document.querySelectorAll('.form-mode-btn').forEach((btn) => {
+        btn.addEventListener('click', () => switchFormMode(btn.dataset.formMode));
+      });
+
+      // Live Calculations
+      document.getElementById('jobAgreedPrice').addEventListener('input', updateJobBalancePreview);
+      document.getElementById('jobPaidNow').addEventListener('input', updateJobBalancePreview);
+      document.getElementById('laborWorkerSelect').addEventListener('change', handleWorkerSelectionChange);
+      document.getElementById('laborDailyFee').addEventListener('input', updateLaborTotalPreview);
+      document.getElementById('laborFoodFee').addEventListener('input', updateLaborTotalPreview);
+
+      // Unified Form Submission (Works identically on Public Landing Page & Admin Portal)
+      document.getElementById('workshopRecordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const mode = document.getElementById('activeFormMode').value;
+        let newRecord = null;
+
+        if (mode === 'job') {
+          const date = document.getElementById('jobDate').value;
+          const reference = document.getElementById('jobTicket').value.trim() || getNextJobTicket();
+          const clientName = document.getElementById('jobClientName').value.trim();
+          const clientPhone = document.getElementById('jobClientPhone').value.trim();
+          const category = document.getElementById('jobCategory').value;
+          const loggedBy = document.getElementById('jobLoggedBy').value.trim();
+          const description = document.getElementById('jobDescription').value.trim();
+          const agreedPrice = parseFloat(document.getElementById('jobAgreedPrice').value);
+          const paidAmount = parseFloat(document.getElementById('jobPaidNow').value);
+          const paymentMethod = document.getElementById('jobPaymentMethod').value;
+          const notes = document.getElementById('jobNotes').value.trim();
+
+          if (!date || !clientName || !loggedBy || !description || isNaN(agreedPrice) || agreedPrice <= 0 || isNaN(paidAmount) || paidAmount < 0) {
+            showToast('Please fill in Client Name, Staff Name, Work Description, Agreed Price & Paid Amount.', true);
+            return;
+          }
+
+          const finalAgreed = Math.max(agreedPrice, paidAmount);
+          const balanceDue = Math.max(0, finalAgreed - paidAmount);
+
+          newRecord = {
+            id: `rec-${Date.now()}`,
+            mode: 'job',
+            date,
+            reference,
+            clientName,
+            clientPhone,
+            category,
+            loggedBy,
+            description,
+            agreedPrice: finalAgreed,
+            paidAmount,
+            balanceDue,
+            paymentMethod,
+            notes
+          };
+        } else if (mode === 'labor') {
+          const date = document.getElementById('laborDate').value;
+          const workerId = document.getElementById('laborWorkerSelect').value;
+          const workerObj = workers.find((w) => w.id === workerId);
+          const dailyFee = parseFloat(document.getElementById('laborDailyFee').value) || 0;
+          const foodFee = parseFloat(document.getElementById('laborFoodFee').value) || 0;
+          const paymentMethod = document.getElementById('laborPaymentMethod').value;
+          const notes = document.getElementById('laborNotes').value.trim();
+
+          if (!date || !workerObj || dailyFee + foodFee <= 0) {
+            showToast('Please select a registered worker and enter valid Daily/Food fees.', true);
+            return;
+          }
+
+          newRecord = {
+            id: `rec-${Date.now()}`,
+            mode: 'labor',
+            date,
+            reference: `LAB-${Math.floor(100 + Math.random() * 900)}`,
+            workerId: workerObj.id,
+            workerName: workerObj.name,
+            workerRole: workerObj.role,
+            dailyFee,
+            foodFee,
+            paidAmount: dailyFee + foodFee,
+            paymentMethod,
+            notes
+          };
+        } else {
+          const date = document.getElementById('expenseDate').value;
+          const category = document.getElementById('expenseCategory').value;
+          const vendor = document.getElementById('expenseVendor').value.trim();
+          const description = document.getElementById('expenseItem').value.trim();
+          const paidAmount = parseFloat(document.getElementById('expenseAmount').value);
+          const paymentMethod = document.getElementById('expensePaymentMethod').value;
+          const notes = document.getElementById('expenseNotes').value.trim();
+
+          if (!date || !vendor || !description || isNaN(paidAmount) || paidAmount <= 0) {
+            showToast('Please enter Supplier/Vendor, Item Description, and valid Amount Paid.', true);
+            return;
+          }
+
+          newRecord = {
+            id: `rec-${Date.now()}`,
+            mode: 'expense',
+            date,
+            reference: `EXP-${Math.floor(100 + Math.random() * 900)}`,
+            category,
+            vendor,
+            description,
+            paidAmount,
+            paymentMethod,
+            notes
+          };
+        }
+
+        records.unshift(newRecord);
+        lastSubmittedRecord = newRecord;
+        saveLocalData();
+
+        const syncRes = await syncRecordToCloud(newRecord);
+        resetWorkshopFormFields();
+        switchFormMode(mode);
+        refreshAllUI();
+
+        if (!isAdminLoggedIn) {
+          // Public Worker Landing Confirmation (Strictly zero financial ledger exposure)
+          const confirmCard = document.getElementById('publicConfirmationCard');
+          const summaryEl = document.getElementById('publicConfirmSummary');
+          const cloudEl = document.getElementById('publicConfirmCloudStatus');
+
+          if (newRecord.mode === 'job') {
+            summaryEl.textContent = `Ticket ${newRecord.reference} for ${newRecord.clientName} (${formatNaira(newRecord.paidAmount)} paid) logged by ${newRecord.loggedBy}.`;
+          } else if (newRecord.mode === 'labor') {
+            summaryEl.textContent = `Allowance for ${newRecord.workerName} (Daily ${formatNaira(newRecord.dailyFee)} + Food ${formatNaira(newRecord.foodFee)}) recorded.`;
+          } else {
+            summaryEl.textContent = `Expense (${newRecord.category} — ${formatNaira(newRecord.paidAmount)}) to ${newRecord.vendor} recorded.`;
+          }
+
+          cloudEl.textContent = syncRes.message;
+          confirmCard.classList.remove('hidden');
+          confirmCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          showToast('Record saved & synced!');
+        }
+      });
+
+      // Public Confirmation Buttons
+      document.getElementById('publicPrintSlipBtn').addEventListener('click', () => {
+        if (lastSubmittedRecord) printRecordSlip(lastSubmittedRecord);
+      });
+
+      document.getElementById('publicLogAnotherBtn').addEventListener('click', () => {
+        document.getElementById('publicConfirmationCard').classList.add('hidden');
+      });
+
+      // Admin Login Modal Controls
+      document.getElementById('openAdminLoginBtn').addEventListener('click', () => {
+        document.getElementById('loginErrorMsg').classList.add('hidden');
+        document.getElementById('adminLoginForm').reset();
+        const modal = document.getElementById('adminLoginModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.getElementById('loginAdminId').focus();
+      });
+
+      document.getElementById('closeAdminLoginModalBtn').addEventListener('click', () => {
+        const modal = document.getElementById('adminLoginModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      });
+
+      document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const enteredId = document.getElementById('loginAdminId').value.trim();
+        const enteredPass = document.getElementById('loginAdminPassword').value;
+
+        if (enteredId === appConfig.adminId && enteredPass === appConfig.adminPassword) {
+          isAdminLoggedIn = true;
+          document.getElementById('adminLoginModal').classList.add('hidden');
+          document.getElementById('adminLoginModal').classList.remove('flex');
+          document.getElementById('publicLandingView').classList.add('hidden');
+          document.getElementById('adminPortalView').classList.remove('hidden');
+          switchAdminTab('dashboard');
+          refreshAllUI();
+          showToast('Welcome back, Admin!');
+        } else {
+          document.getElementById('loginErrorMsg').classList.remove('hidden');
+        }
+      });
+
+      // Admin Logout back to Public Worker Landing Page
+      function logoutToLanding() {
+        isAdminLoggedIn = false;
+        document.getElementById('adminPortalView').classList.add('hidden');
+        document.getElementById('publicLandingView').classList.remove('hidden');
+        document.getElementById('publicConfirmationCard').classList.add('hidden');
+        mountSharedForm('publicFormMount');
+        resetWorkshopFormFields();
+        showToast('Logged out to Worker Landing Page.');
+      }
+
+      document.getElementById('logoutAdminBtn').addEventListener('click', logoutToLanding);
+      document.getElementById('mobileLogoutBtn').addEventListener('click', logoutToLanding);
+
+      // Admin Drawer & Tab Navigation
+      document.getElementById('openAdminDrawerBtn').addEventListener('click', () => {
+        document.getElementById('adminSidebar').classList.remove('-translate-x-full');
+        document.getElementById('adminDrawerBackdrop').classList.remove('hidden');
+      });
+
+      function closeAdminDrawer() {
+        document.getElementById('adminSidebar').classList.add('-translate-x-full');
+        document.getElementById('adminDrawerBackdrop').classList.add('hidden');
+      }
+
+      document.getElementById('closeAdminDrawerBtn').addEventListener('click', closeAdminDrawer);
+      document.getElementById('adminDrawerBackdrop').addEventListener('click', closeAdminDrawer);
+
+      function switchAdminTab(tabName) {
+        closeAdminDrawer();
+        document.querySelectorAll('.admin-nav-btn').forEach((btn) => {
+          const active = btn.dataset.adminTab === tabName;
+          btn.className = active
+            ? 'admin-nav-btn w-full flex items-center justify-between px-3.5 min-h-[46px] rounded-xl text-sm font-bold bg-sky-600 text-white shadow-md shadow-sky-950/40 transition cursor-pointer'
+            : 'admin-nav-btn w-full flex items-center justify-between px-3.5 min-h-[46px] rounded-xl text-sm font-semibold text-slate-300 hover:bg-navy-800 hover:text-white transition cursor-pointer';
+        });
+
+        document.querySelectorAll('.admin-tab-panel').forEach((panel) => {
+          panel.classList.toggle('hidden', panel.id !== `tab-${tabName}`);
+        });
+
+        if (tabName === 'log-record') {
+          mountSharedForm('adminFormMount');
+          resetWorkshopFormFields();
+        } else if (tabName === 'dashboard') {
+          renderAdminDashboard();
+        } else if (tabName === 'workers') {
+          renderWorkersDirectory();
+        }
+      }
+
+      document.querySelectorAll('.admin-nav-btn').forEach((btn) => {
+        btn.addEventListener('click', () => switchAdminTab(btn.dataset.adminTab));
+      });
+
+      // Dashboard Filters & Ledger Actions (Mark Balance Paid, Print Receipt, Delete)
+      document.getElementById('adminSearchInput').addEventListener('input', renderAdminLedgerTable);
+      document.getElementById('adminTypeFilter').addEventListener('change', renderAdminLedgerTable);
+      document.getElementById('adminResetFilterBtn').addEventListener('click', () => {
+        document.getElementById('adminSearchInput').value = '';
+        document.getElementById('adminTypeFilter').value = 'all';
+        renderAdminLedgerTable();
+      });
+
+      document.getElementById('tab-dashboard').addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-ledger-action]');
+        if (!btn) return;
+        const { ledgerAction, id } = btn.dataset;
+        const rec = records.find((item) => item.id === id);
+        if (!rec) return;
+
+        if (ledgerAction === 'print') {
+          printRecordSlip(rec);
+        } else if (ledgerAction === 'settle') {
+          showConfirmModal({
+            title: `Mark Balance Paid — ${rec.reference}`,
+            message: `Confirm full settlement of ${formatNaira(rec.balanceDue)} balance from ${rec.clientName}?`,
+            buttons: [
+              {
+                label: 'Cancel',
+                className: 'px-4 min-h-[40px] rounded-xl bg-navy-800 text-slate-300 text-xs font-bold cursor-pointer'
+              },
+              {
+                label: 'Mark Balance Paid',
+                className: 'px-4 min-h-[40px] rounded-xl bg-emerald-600 text-white text-xs font-extrabold cursor-pointer',
+                onClick: async () => {
+                  rec.paidAmount = rec.agreedPrice;
+                  rec.balanceDue = 0;
+                  rec.notes = `${rec.notes ? rec.notes + ' • ' : ''}[Balance settled in full]`;
+                  saveLocalData();
+                  await syncRecordToCloud(rec);
+                  renderAdminDashboard();
+                  showToast(`Job ${rec.reference} marked Paid in Full!`);
+                }
+              }
+            ]
+          });
+        } else if (ledgerAction === 'delete') {
+          showConfirmModal({
+            title: 'Delete Workshop Record?',
+            message: `Permanently delete ${rec.reference} (${formatNaira(rec.paidAmount)}) from the ledger?`,
+            buttons: [
+              {
+                label: 'Cancel',
+                className: 'px-4 min-h-[40px] rounded-xl bg-navy-800 text-slate-300 text-xs font-bold cursor-pointer'
+              },
+              {
+                label: 'Delete',
+                className: 'px-4 min-h-[40px] rounded-xl bg-rose-600 text-white text-xs font-extrabold cursor-pointer',
+                onClick: async () => {
+                  records = records.filter((item) => item.id !== id);
+                  saveLocalData();
+                  if (db && currentUser) {
+                    try {
+                      await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'salman_records', id));
+                    } catch (err) {}
+                  }
+                  renderAdminDashboard();
+                  showToast('Record deleted.');
+                }
+              }
+            ]
+          });
+        }
+      });
+
+      // Clear Sample Data Button
+      document.getElementById('dashClearSampleBtn').addEventListener('click', () => {
+        showConfirmModal({
+          title: 'Clear Sample Workshop Data?',
+          message: 'This will remove all pre-loaded sample jobs and expenses so you can start SALMAN WELDING WORKSHOP LEDGER with a clean slate.',
+          buttons: [
+            {
+              label: 'Cancel',
+              className: 'px-4 min-h-[40px] rounded-xl bg-navy-800 text-slate-300 text-xs font-bold cursor-pointer'
+            },
+            {
+              label: 'Clear All Sample Records',
+              className: 'px-4 min-h-[40px] rounded-xl bg-rose-600 text-white text-xs font-extrabold cursor-pointer',
+              onClick: () => {
+                records = [];
+                saveLocalData();
+                refreshAllUI();
+                showToast('Sample records cleared!');
+              }
+            }
+          ]
+        });
+      });
+
+      // Workers Directory: Add & Remove Workers
+      document.getElementById('addWorkerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('workerNameInput').value.trim();
+        const role = document.getElementById('workerRoleInput').value;
+        const phone = document.getElementById('workerPhoneInput').value.trim();
+        const dailyFee = parseFloat(document.getElementById('workerDailyFeeInput').value) || 0;
+        const foodFee = parseFloat(document.getElementById('workerFoodFeeInput').value) || 0;
+
+        if (!name) return;
+
+        const newWorker = {
+          id: `wrk-${Date.now()}`,
+          name,
+          role,
+          phone,
+          dailyFee,
+          foodFee
+        };
+
+        workers.push(newWorker);
+        saveLocalData();
+        await syncWorkerToCloud(newWorker, false);
+        document.getElementById('addWorkerForm').reset();
+        refreshAllUI();
+        showToast(`${name} added to Workshop Workers!`);
+      });
+
+      document.getElementById('workersListContainer').addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-remove-worker]');
+        if (!btn) return;
+        const wId = btn.dataset.removeWorker;
+        const workerObj = workers.find((w) => w.id === wId);
+        if (!workerObj) return;
+
+        showConfirmModal({
+          title: 'Remove Workshop Worker?',
+          message: `Remove ${workerObj.name} (${workerObj.role}) from the active workers list? Past payment logs will remain intact.`,
+          buttons: [
+            {
+              label: 'Cancel',
+              className: 'px-4 min-h-[40px] rounded-xl bg-navy-800 text-slate-300 text-xs font-bold cursor-pointer'
+            },
+            {
+              label: 'Remove Worker',
+              className: 'px-4 min-h-[40px] rounded-xl bg-rose-600 text-white text-xs font-extrabold cursor-pointer',
+              onClick: async () => {
+                workers = workers.filter((w) => w.id !== wId);
+                saveLocalData();
+                await syncWorkerToCloud(workerObj, true);
+                refreshAllUI();
+                showToast(`${workerObj.name} removed.`);
+              }
+            }
+          ]
+        });
+      });
+
+      // Google Sheets & Google Sites Setup Actions
+      document.getElementById('googleConfigForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        appConfig.googleSheetUrl = document.getElementById('googleSheetUrlInput').value.trim();
+        appConfig.googleWebAppUrl = document.getElementById('googleWebAppUrlInput').value.trim();
+        saveLocalData();
+        updateSyncIndicators();
+        showToast('Google Sheets connection saved!');
+      });
+
+      document.getElementById('syncAllToSheetBtn').addEventListener('click', syncAllDataToGoogleSheet);
+      document.getElementById('dashSyncNowBtn').addEventListener('click', syncAllDataToGoogleSheet);
+
+      document.getElementById('copyAppsScriptBtn').addEventListener('click', () => {
+        const codeText = document.getElementById('appsScriptCodeBlock').textContent;
+        const tempArea = document.createElement('textarea');
+        tempArea.value = codeText;
+        document.body.appendChild(tempArea);
+        tempArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempArea);
+        showToast('Google Apps Script code copied to clipboard!');
+      });
+
+      document.getElementById('downloadStandaloneHtmlBtn').addEventListener('click', () => {
+        const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Salman_Welding_Workshop_Ledger.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Standalone HTML downloaded for Google Sites!');
+      });
+
+      // Admin Security Update Form
+      document.getElementById('adminSecurityForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newId = document.getElementById('newAdminIdInput').value.trim();
+        const newPass = document.getElementById('newAdminPassInput').value;
+        const confirmPass = document.getElementById('confirmAdminPassInput').value;
+
+        if (!newId || !newPass) {
+          showToast('Admin ID and Password cannot be empty.', true);
+          return;
+        }
+        if (newPass !== confirmPass) {
+          showToast('Passwords do not match.', true);
+          return;
+        }
+
+        appConfig.adminId = newId;
+        appConfig.adminPassword = newPass;
+        saveLocalData();
+        document.getElementById('newAdminPassInput').value = '';
+        document.getElementById('confirmAdminPassInput').value = '';
+        showToast('Admin ID & Password updated successfully!');
+      });
+    });
+  </script>
+</body>
+</html>
