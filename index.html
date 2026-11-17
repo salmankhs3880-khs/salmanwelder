@@ -128,6 +128,10 @@
 
           <!-- Right Action: Prominent Admin Login Button -->
           <div class="flex items-center gap-2.5 shrink-0">
+            <button type="button" id="publicPullCloudBtn" class="inline-flex items-center gap-1.5 px-3 min-h-[44px] rounded-xl bg-navy-800 hover:bg-navy-700 text-sky-300 border border-sky-500/30 font-bold text-xs transition cursor-pointer" title="Refresh workers & ticket numbers from Google Sheet">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              <span class="hidden sm:inline">Sync Sheet</span>
+            </button>
             <button type="button" id="openAdminLoginBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-navy-950 font-extrabold text-xs sm:text-sm shadow-md shadow-amber-950/40 transition cursor-pointer">
               <i data-lucide="shield-check" class="w-4 h-4"></i>
               <span>Admin Login</span>
@@ -187,7 +191,7 @@
 
       <!-- Footer -->
       <footer class="border-t border-navy-800 py-4 px-4 text-center text-xs text-slate-400">
-        SALMAN WELDING WORKSHOP LEDGER • Secure Chromebook &amp; Google Sites Portal
+        SALMAN WELDING WORKSHOP LEDGER • Secure Chromebook &amp; GitHub Pages Portal
       </footer>
     </div>
 
@@ -244,7 +248,7 @@
 
             <button type="button" data-admin-tab="google-setup" class="admin-nav-btn w-full flex items-center gap-3 px-3.5 min-h-[46px] rounded-xl text-sm font-semibold text-slate-300 hover:bg-navy-800 hover:text-white transition cursor-pointer">
               <i data-lucide="file-spreadsheet" class="w-4 h-4 text-sky-400 shrink-0"></i>
-              <span class="text-left leading-tight">Google Sheets &amp; Site</span>
+              <span class="text-left leading-tight">Sheets &amp; GitHub</span>
             </button>
 
             <button type="button" data-admin-tab="security" class="admin-nav-btn w-full flex items-center gap-3 px-3.5 min-h-[46px] rounded-xl text-sm font-semibold text-slate-300 hover:bg-navy-800 hover:text-white transition cursor-pointer">
@@ -300,9 +304,13 @@
                 <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Complete real-time overview of fabrication revenue, worker allowances, expenses &amp; balances</p>
               </div>
               <div class="flex flex-wrap items-center gap-2">
+                <button type="button" id="dashPullCloudBtn" class="inline-flex items-center gap-2 px-3.5 min-h-[42px] rounded-xl bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition cursor-pointer">
+                  <i data-lucide="cloud-download" class="w-4 h-4"></i>
+                  <span>Pull Live Sheet Data</span>
+                </button>
                 <button type="button" id="dashSyncNowBtn" class="inline-flex items-center gap-2 px-3.5 min-h-[42px] rounded-xl bg-navy-800 hover:bg-navy-700 text-sky-300 border border-sky-500/30 text-xs font-bold transition cursor-pointer">
                   <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                  <span>Sync to Sheet</span>
+                  <span>Push to Sheet</span>
                 </button>
                 <button type="button" id="dashClearSampleBtn" class="inline-flex items-center gap-2 px-3.5 min-h-[42px] rounded-xl bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-700/50 text-xs font-bold transition cursor-pointer">
                   <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -557,13 +565,13 @@
           </section>
 
           <!-- ===============================================================
-               ADMIN TAB 4: GOOGLE SHEETS & GOOGLE SITE DEPLOYMENT SETUP
+               ADMIN TAB 4: GOOGLE SHEETS & GITHUB PAGES DEPLOYMENT SETUP
                =============================================================== -->
           <section id="tab-google-setup" class="admin-tab-panel hidden space-y-6 max-w-5xl">
             <div>
-              <h2 class="text-xl sm:text-2xl font-extrabold text-white">Google Sheets &amp; Google Site Live Setup</h2>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-white">Google Sheets &amp; GitHub Pages Live Setup</h2>
               <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
-                Connect your Google Drive Spreadsheet so every record from both the Worker Landing Page and Admin Portal saves online automatically, and publish live on Google Sites.
+                Your Google Drive Spreadsheet is permanently connected for automatic cloud saving and live data retrieval on GitHub Pages.
               </p>
             </div>
 
@@ -592,14 +600,24 @@
                     <span>Save Google Sheet Connection</span>
                   </button>
 
-                  <button type="button" id="syncAllToSheetBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition cursor-pointer">
-                    <i data-lucide="upload-cloud" class="w-4 h-4"></i>
-                    <span>Sync All Existing Records to Google Sheet</span>
+                  <button type="button" id="pullLatestFromSheetBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition cursor-pointer">
+                    <i data-lucide="cloud-download" class="w-4 h-4"></i>
+                    <span>Pull Latest Data from Google Sheet</span>
                   </button>
 
-                  <a id="openConnectedSheetLink" href="#" target="_blank" rel="noopener noreferrer" class="hidden inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-navy-800 hover:bg-navy-700 border border-navy-600 text-sky-300 font-bold text-xs sm:text-sm transition">
+                  <button type="button" id="syncAllToSheetBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-navy-800 hover:bg-navy-700 border border-sky-500/30 text-sky-300 font-bold text-xs sm:text-sm transition cursor-pointer">
+                    <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                    <span>Push All Local Records to Sheet</span>
+                  </button>
+
+                  <button type="button" id="resetDefaultUrlsBtn" class="inline-flex items-center gap-2 px-3.5 min-h-[44px] rounded-xl bg-navy-900 hover:bg-navy-800 border border-navy-700 text-amber-300 font-bold text-xs transition cursor-pointer">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    <span>Reset to Default URLs</span>
+                  </button>
+
+                  <a id="openConnectedSheetLink" href="https://docs.google.com/spreadsheets/d/184PHfGtZB9lbt7YOp3WUk7d2BQ5OAQGWOQ9OAqAlVQg/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-navy-800 hover:bg-navy-700 border border-navy-600 text-sky-300 font-bold text-xs sm:text-sm transition">
                     <i data-lucide="external-link" class="w-4 h-4"></i>
-                    <span>Open Google Sheet</span>
+                    <span>Open Live Google Sheet</span>
                   </a>
                 </div>
               </form>
@@ -631,34 +649,34 @@
 
               <pre id="appsScriptCodeBlock" class="bg-navy-950 text-sky-300 text-xs p-4 rounded-xl border border-navy-700 overflow-x-auto max-h-60 leading-relaxed font-mono"></pre>
             </div>
-
-            <!-- Step 3: Publish Live on Google Sites -->
+            <!-- Step 3: Publish Live on GitHub Pages -->
             <div class="bg-navy-850 rounded-2xl p-5 sm:p-6 border border-navy-700/90 shadow-lg space-y-4">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <div class="flex items-center gap-2.5">
                   <span class="w-7 h-7 rounded-full bg-emerald-500 text-navy-950 font-extrabold text-xs flex items-center justify-center">3</span>
                   <div>
-                    <h3 class="text-base font-extrabold text-white">Download &amp; Publish Live on Google Sites</h3>
-                    <p class="text-xs text-slate-400">Download the self-contained HTML file to embed in Google Sites or host online</p>
+                    <h3 class="text-base font-extrabold text-white">Download &amp; Publish Live on GitHub Pages</h3>
+                    <p class="text-xs text-slate-400">Download the self-contained <code class="text-sky-300">index.html</code> file and upload it to your GitHub repository</p>
                   </div>
                 </div>
                 <button type="button" id="downloadStandaloneHtmlBtn" class="inline-flex items-center gap-2 px-4 min-h-[44px] rounded-xl bg-sky-500 hover:bg-sky-400 text-navy-950 font-extrabold text-xs sm:text-sm transition cursor-pointer">
                   <i data-lucide="download" class="w-4 h-4"></i>
-                  <span>Download Standalone HTML for Google Sites / Hosting</span>
+                  <span>Download index.html for GitHub Pages</span>
                 </button>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
                 <div class="p-4 rounded-xl bg-navy-900/90 border border-navy-700 space-y-1.5">
-                  <p class="font-bold text-white">Option A: Direct Google Sites Embed Code</p>
-                  <p>1. Open <strong>sites.google.com</strong> and create/open your workshop site.</p>
-                  <p>2. Click <strong>Insert &rarr; Embed &rarr; Embed code</strong>.</p>
-                  <p>3. Open the downloaded HTML file in ChromeOS Text, copy all text, paste it into the Embed Code box, and click <strong>Publish</strong>.</p>
+                  <p class="font-bold text-white">Step A: Upload index.html to GitHub</p>
+                  <p>1. Click <strong>Download index.html for GitHub Pages</strong> above.</p>
+                  <p>2. Open your GitHub repository on your Chromebook and click <strong>Add file &rarr; Upload files</strong>.</p>
+                  <p>3. Upload <code class="text-sky-300">index.html</code> (replacing any old version) and click <strong>Commit changes</strong>.</p>
                 </div>
                 <div class="p-4 rounded-xl bg-navy-900/90 border border-navy-700 space-y-1.5">
-                  <p class="font-bold text-white">Option B: Host URL &amp; Embed Full-Screen</p>
-                  <p>1. Drag the downloaded <code class="text-sky-300">Salman_Welding_Workshop.html</code> file onto a free static host (e.g., Netlify Drop or GitHub Pages).</p>
-                  <p>2. In Google Sites, choose <strong>Insert &rarr; Embed &rarr; By URL</strong> and paste your live link for a full-screen Chromebook &amp; mobile app.</p>
+                  <p class="font-bold text-white">Step B: Enable GitHub Pages Live Link</p>
+                  <p>1. In your repository, go to <strong>Settings &rarr; Pages</strong>.</p>
+                  <p>2. Under <strong>Branch</strong>, select <code class="text-amber-300">main</code> and folder <code class="text-amber-300">/ (root)</code>, then click <strong>Save</strong>.</p>
+                  <p>3. Share your <code class="text-emerald-300">username.github.io/repo-name</code> link with workers—it auto-syncs with your Google Sheet!</p>
                 </div>
               </div>
             </div>
@@ -1011,37 +1029,30 @@
   </div>
 
   <!-- =======================================================================
-       FIREBASE + GOOGLE SHEETS SYNC + COMPLETE APPLICATION LOGIC
+       GOOGLE SHEETS SYNC + COMPLETE APPLICATION LOGIC
        ======================================================================= -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    // --- 1. Local Storage Keys & Defaults ---
+  <script>
+    // --- 1. Local Storage Keys & Permanent Hardcoded Google URLs ---
     const LS_RECORDS_KEY = 'salman_welding_records_v1';
     const LS_WORKERS_KEY = 'salman_welding_workers_v1';
     const LS_CONFIG_KEY = 'salman_welding_config_v1';
+
+    const DEFAULT_SHEET_URL = 'https://docs.google.com/spreadsheets/d/184PHfGtZB9lbt7YOp3WUk7d2BQ5OAQGWOQ9OAqAlVQg/edit?gid=0#gid=0';
+    const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxblgjf6B_u3NzRdrJt0Ng7-d8hj3xCksS8L5Oz5V7r9qMiMMbUNY-L3GEeqypCfxsGnw/exec';
 
     let records = [];
     let workers = [];
     let appConfig = {
       adminId: 'SALMAN-ADMIN',
       adminPassword: '2026',
-      googleSheetUrl: '',
-      googleWebAppUrl: ''
+      googleSheetUrl: DEFAULT_SHEET_URL,
+      googleWebAppUrl: DEFAULT_SCRIPT_URL
     };
 
     let isAdminLoggedIn = false;
     let lastSubmittedRecord = null;
     let incomeChartInstance = null;
     let expenseChartInstance = null;
-
-    // Firebase State (Gracefully operates alongside LocalStorage + Google Sheets)
-    let db = null;
-    let auth = null;
-    let currentUser = null;
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'salman-welding-workshop';
 
     // --- 2. Pre-Loaded Realistic Welding Workshop Sample Data ---
     function getDefaultWorkers() {
@@ -1149,82 +1160,95 @@
       ];
     }
 
-    // --- 3. Formatting & Helper Utilities ---
+    // --- 3. Formatting, Escaping & Modal Utilities ---
     function formatNaira(amount) {
       const num = Number(amount) || 0;
       return '₦' + num.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function esc(str) {
-      return String(str || '')
+      if (str === null || str === undefined) return '';
+      return String(str)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
     function getNextJobTicket() {
-      let max = 1041;
+      let maxNum = 1041;
       records.forEach((r) => {
-        const m = String(r.reference || '').match(/JOB-(\d+)/i);
-        if (m && parseInt(m[1], 10) > max) max = parseInt(m[1], 10);
+        if (r.mode === 'job' && r.reference) {
+          const match = String(r.reference).match(/(\d+)/);
+          if (match) {
+            const val = parseInt(match[1], 10);
+            if (val > maxNum) maxNum = val;
+          }
+        }
       });
-      return `JOB-${max + 1}`;
+      return `JOB-${maxNum + 1}`;
     }
 
     let toastTimer = null;
-    function showToast(message, isError = false) {
-      const el = document.getElementById('toastNotification');
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toastNotification');
       const dot = document.getElementById('toastDot');
-      document.getElementById('toastText').textContent = message;
+      const text = document.getElementById('toastText');
+      if (!toast || !text) return;
+
+      text.textContent = msg;
       dot.className = `w-2.5 h-2.5 rounded-full shrink-0 ${isError ? 'bg-rose-400' : 'bg-emerald-400'}`;
-      el.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.remove('translate-y-24', 'opacity-0');
+
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
-        el.classList.add('translate-y-24', 'opacity-0');
-      }, 3400);
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3600);
     }
 
-    function showConfirmModal({ title, message, customHTML = '', buttons = [] }) {
+    function showConfirmModal({ title, message, buttons }) {
       const modal = document.getElementById('customConfirmModal');
-      document.getElementById('confirmModalTitle').textContent = title;
-      document.getElementById('confirmModalText').textContent = message;
+      document.getElementById('confirmModalTitle').textContent = title || 'Confirm Action';
+      document.getElementById('confirmModalText').textContent = message || '';
+      const actionsBox = document.getElementById('confirmModalActions');
+      actionsBox.innerHTML = '';
 
-      const body = document.getElementById('confirmModalBody');
-      if (customHTML) {
-        body.innerHTML = customHTML;
-        body.classList.remove('hidden');
-      } else {
-        body.innerHTML = '';
-        body.classList.add('hidden');
-      }
-
-      const actions = document.getElementById('confirmModalActions');
-      actions.innerHTML = '';
-      buttons.forEach((b) => {
+      (buttons || []).forEach((btnCfg) => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.textContent = b.label;
-        btn.className = b.className;
-        btn.addEventListener('click', () => {
-          const close = b.onClick ? b.onClick() !== false : true;
-          if (close) {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+        btn.textContent = btnCfg.label;
+        btn.className = btnCfg.className;
+        btn.addEventListener('click', async () => {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+          if (typeof btnCfg.onClick === 'function') {
+            await btnCfg.onClick();
           }
         });
-        actions.appendChild(btn);
+        actionsBox.appendChild(btn);
       });
 
       modal.classList.remove('hidden');
       modal.classList.add('flex');
     }
 
-    // --- 4. Storage Persistence (LocalStorage + Firestore + Google Sheets HTTP POST) ---
+    // --- 4. Storage Persistence (LocalStorage + Firestore + Google Sheets GET/POST) ---
     function loadLocalData() {
       try {
         const cfg = localStorage.getItem(LS_CONFIG_KEY);
-        if (cfg) appConfig = { ...appConfig, ...JSON.parse(cfg) };
+        if (cfg) {
+          const parsed = JSON.parse(cfg);
+          appConfig = {
+            ...appConfig,
+            ...parsed,
+            googleSheetUrl: (parsed.googleSheetUrl || '').trim() || DEFAULT_SHEET_URL,
+            googleWebAppUrl: (parsed.googleWebAppUrl || '').trim() || DEFAULT_SCRIPT_URL
+          };
+        } else {
+          appConfig.googleSheetUrl = DEFAULT_SHEET_URL;
+          appConfig.googleWebAppUrl = DEFAULT_SCRIPT_URL;
+        }
 
         const wrk = localStorage.getItem(LS_WORKERS_KEY);
         workers = wrk ? JSON.parse(wrk) : getDefaultWorkers();
@@ -1234,6 +1258,9 @@
         records = recs ? JSON.parse(recs) : getDefaultRecords();
         if (!recs) localStorage.setItem(LS_RECORDS_KEY, JSON.stringify(records));
       } catch (e) {
+        // Cross-origin Google Sites iframe fallback when localStorage is restricted
+        appConfig.googleSheetUrl = DEFAULT_SHEET_URL;
+        appConfig.googleWebAppUrl = DEFAULT_SCRIPT_URL;
         workers = getDefaultWorkers();
         records = getDefaultRecords();
       }
@@ -1245,6 +1272,59 @@
         localStorage.setItem(LS_WORKERS_KEY, JSON.stringify(workers));
         localStorage.setItem(LS_CONFIG_KEY, JSON.stringify(appConfig));
       } catch (e) {}
+    }
+
+    // Automatically retrieve live records and workers from Google Sheets on page load & sync
+    async function fetchFromGoogleSheets(silent = true) {
+      const scriptUrl = (appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL).trim();
+      if (!scriptUrl) return false;
+
+      const pubText = document.getElementById('publicSyncText');
+      const admLabel = document.getElementById('adminSyncLabel');
+      if (pubText) pubText.textContent = 'Syncing Sheet...';
+      if (admLabel) admLabel.textContent = 'Google Sheet: Syncing...';
+
+      try {
+        const separator = scriptUrl.includes('?') ? '&' : '?';
+        const response = await fetch(`${scriptUrl}${separator}action=getData&t=${Date.now()}`, {
+          method: 'GET',
+          redirect: 'follow'
+        });
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+
+        let updated = false;
+        if (data && Array.isArray(data.records)) {
+          records = data.records;
+          updated = true;
+        }
+        if (data && Array.isArray(data.workers)) {
+          workers = data.workers;
+          updated = true;
+        }
+
+        if (updated) {
+          saveLocalData();
+          refreshAllUI();
+          // Refresh next job ticket # on form if user hasn't typed into it yet
+          const ticketInput = document.getElementById('jobTicket');
+          if (ticketInput && !document.getElementById('jobClientName').value.trim()) {
+            ticketInput.value = getNextJobTicket();
+          }
+        }
+
+        updateSyncIndicators(true);
+        if (!silent) showToast(`Retrieved ${records.length} records & ${workers.length} workers from Google Sheet!`);
+        return true;
+      } catch (err) {
+        console.warn('Google Sheets GET fetch note:', err);
+        updateSyncIndicators(true);
+        if (!silent) {
+          showToast('Connected to Google Sheet (Ensure Apps Script has doGet deployed for live pull).', true);
+        }
+        return false;
+      }
     }
 
     async function initCloudDatabase() {
@@ -1295,22 +1375,80 @@
           });
         }
       } catch (e) {
-        console.warn('Running in offline/Google Sheets mode:', e);
+        // Fallback when localStorage is restricted
+        appConfig.googleSheetUrl = DEFAULT_SHEET_URL;
+        appConfig.googleWebAppUrl = DEFAULT_SCRIPT_URL;
+        workers = getDefaultWorkers();
+        records = getDefaultRecords();
+      }
+    }
+
+    function saveLocalData() {
+      try {
+        localStorage.setItem(LS_RECORDS_KEY, JSON.stringify(records));
+        localStorage.setItem(LS_WORKERS_KEY, JSON.stringify(workers));
+        localStorage.setItem(LS_CONFIG_KEY, JSON.stringify(appConfig));
+      } catch (e) {}
+    }
+
+    // Automatically retrieve live records and workers from Google Sheets on page load & sync
+    async function fetchFromGoogleSheets(silent = true) {
+      const scriptUrl = (appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL).trim();
+      if (!scriptUrl) return false;
+
+      const pubText = document.getElementById('publicSyncText');
+      const admLabel = document.getElementById('adminSyncLabel');
+      if (pubText) pubText.textContent = 'Syncing Sheet...';
+      if (admLabel) admLabel.textContent = 'Google Sheet: Syncing...';
+
+      try {
+        const separator = scriptUrl.includes('?') ? '&' : '?';
+        const response = await fetch(`${scriptUrl}${separator}action=getData&t=${Date.now()}`, {
+          method: 'GET',
+          redirect: 'follow'
+        });
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+
+        let updated = false;
+        if (data && Array.isArray(data.records)) {
+          records = data.records;
+          updated = true;
+        }
+        if (data && Array.isArray(data.workers)) {
+          workers = data.workers;
+          updated = true;
+        }
+
+        if (updated) {
+          saveLocalData();
+          refreshAllUI();
+          // Refresh next job ticket # on form if user hasn't typed into it yet
+          const ticketInput = document.getElementById('jobTicket');
+          if (ticketInput && !document.getElementById('jobClientName').value.trim()) {
+            ticketInput.value = getNextJobTicket();
+          }
+        }
+
+        updateSyncIndicators(true);
+        if (!silent) showToast(`Retrieved ${records.length} records & ${workers.length} workers from Google Sheet!`);
+        return true;
+      } catch (err) {
+        console.warn('Google Sheets GET fetch note:', err);
+        updateSyncIndicators(true);
+        if (!silent) {
+          showToast('Connected to Google Sheet (Ensure Apps Script has doGet deployed for live pull).', true);
+        }
+        return false;
       }
     }
 
     async function syncRecordToCloud(record) {
-      // 1. Save to Firestore if initialized
-      if (db && currentUser) {
-        try {
-          await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'salman_records', record.id), record);
-        } catch (e) {}
-      }
-
-      // 2. Push HTTP POST to Google Apps Script Web App URL (Google Sheet in Google Drive)
-      const webAppUrl = (appConfig.googleWebAppUrl || '').trim();
+      // Push HTTP POST to Google Apps Script Web App URL (Google Sheet in Google Drive)
+      const webAppUrl = (appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL).trim();
       if (!webAppUrl) {
-        return { syncedToSheet: false, message: 'Saved locally. Connect Google Apps Script URL in Admin Setup for live Google Sheet sync.' };
+        return { syncedToSheet: false, message: 'Saved locally.' };
       }
 
       try {
@@ -1332,15 +1470,7 @@
     }
 
     async function syncWorkerToCloud(worker, isDelete = false) {
-      if (db && currentUser) {
-        try {
-          const ref = doc(db, 'artifacts', appId, 'public', 'data', 'salman_workers', worker.id);
-          if (isDelete) await deleteDoc(ref);
-          else await setDoc(ref, worker);
-        } catch (e) {}
-      }
-
-      const webAppUrl = (appConfig.googleWebAppUrl || '').trim();
+      const webAppUrl = (appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL).trim();
       if (!webAppUrl) return;
       try {
         await fetch(webAppUrl, {
@@ -1357,7 +1487,7 @@
     }
 
     async function syncAllDataToGoogleSheet() {
-      const webAppUrl = (appConfig.googleWebAppUrl || '').trim();
+      const webAppUrl = (appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL).trim();
       if (!webAppUrl) {
         showToast('Please enter your Google Apps Script Web App URL first.', true);
         return;
@@ -1381,7 +1511,10 @@
     }
 
     function updateSyncIndicators() {
-      const isConnected = Boolean((appConfig.googleWebAppUrl || '').trim());
+      const activeScriptUrl = (appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL).trim();
+      const activeSheetUrl = (appConfig.googleSheetUrl || DEFAULT_SHEET_URL).trim();
+      const isConnected = Boolean(activeScriptUrl);
+
       const pubBadge = document.getElementById('publicSyncBadge');
       const pubDot = document.getElementById('publicSyncDot');
       const pubText = document.getElementById('publicSyncText');
@@ -1392,10 +1525,10 @@
       if (isConnected) {
         pubBadge.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300';
         pubDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
-        pubText.textContent = 'Google Sheet Live';
+        pubText.textContent = 'Google Sheet Connected';
 
         admDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0';
-        admLabel.textContent = 'Google Sheet: Live Sync';
+        admLabel.textContent = 'Google Sheet: Connected';
       } else {
         pubBadge.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-navy-800 border border-navy-700 text-amber-300';
         pubDot.className = 'w-1.5 h-1.5 rounded-full bg-amber-400';
@@ -1406,8 +1539,8 @@
       }
 
       const openSheetLink = document.getElementById('openConnectedSheetLink');
-      if (appConfig.googleSheetUrl) {
-        openSheetLink.href = appConfig.googleSheetUrl;
+      if (activeSheetUrl) {
+        openSheetLink.href = activeSheetUrl;
         openSheetLink.classList.remove('hidden');
       } else {
         openSheetLink.classList.add('hidden');
@@ -2032,8 +2165,71 @@ function doPost(e) {
 }
 
 function doGet(e) {
-  return ContentService.createTextOutput('SALMAN WELDING WORKSHOP LEDGER API is Active!')
-    .setMimeType(ContentService.MimeType.TEXT);
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var ledgerSheet = getOrCreateSheet(ss, 'Master_Ledger', [
+      'Record ID', 'Date', 'Reference #', 'Mode / Type', 'Category',
+      'Client / Worker / Vendor', 'Phone', 'Description',
+      'Agreed Price (NGN)', 'Daily Labor Fee (NGN)', 'Food Fee (NGN)',
+      'Total Paid (NGN)', 'Balance Due (NGN)', 'Payment Method', 'Logged By', 'Notes'
+    ]);
+    var workerSheet = getOrCreateSheet(ss, 'Workers', [
+      'Worker ID', 'Full Name', 'Workshop Role', 'Phone', 'Default Daily Fee (NGN)', 'Default Food Fee (NGN)'
+    ]);
+
+    var lRows = ledgerSheet.getDataRange().getValues();
+    var records = [];
+    for (var i = 1; i < lRows.length; i++) {
+      var r = lRows[i];
+      if (!r[0]) continue;
+      var mode = String(r[3] || 'job').toLowerCase();
+      records.push({
+        id: String(r[0]),
+        date: r[1] instanceof Date ? Utilities.formatDate(r[1], ss.getSpreadsheetTimeZone(), 'yyyy-MM-dd') : String(r[1]),
+        reference: String(r[2] || ''),
+        mode: mode,
+        category: String(r[4] || ''),
+        clientName: mode === 'job' ? String(r[5] || '') : '',
+        workerName: mode === 'labor' ? String(r[5] || '') : '',
+        workerRole: mode === 'labor' ? String(r[4] || '') : '',
+        vendor: mode === 'expense' ? String(r[5] || '') : '',
+        clientPhone: String(r[6] || ''),
+        description: String(r[7] || ''),
+        agreedPrice: Number(r[8]) || 0,
+        dailyFee: Number(r[9]) || 0,
+        foodFee: Number(r[10]) || 0,
+        paidAmount: Number(r[11]) || 0,
+        balanceDue: Number(r[12]) || 0,
+        paymentMethod: String(r[13] || 'Cash'),
+        loggedBy: String(r[14] || ''),
+        notes: String(r[15] || '')
+      });
+    }
+
+    var wRows = workerSheet.getDataRange().getValues();
+    var workers = [];
+    for (var j = 1; j < wRows.length; j++) {
+      var w = wRows[j];
+      if (!w[0]) continue;
+      workers.push({
+        id: String(w[0]),
+        name: String(w[1] || ''),
+        role: String(w[2] || ''),
+        phone: String(w[3] || ''),
+        dailyFee: Number(w[4]) || 0,
+        foodFee: Number(w[5]) || 0
+      });
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({
+      status: 'success',
+      records: records,
+      workers: workers
+    })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 function getOrCreateSheet(ss, name, headers) {
@@ -2075,20 +2271,21 @@ function formatWorkerRow(w) {
     // --- 9. Event Listeners & Application Boot ---
     document.addEventListener('DOMContentLoaded', () => {
       loadLocalData();
-      initCloudDatabase();
 
       // Mount Shared Form to Public Landing Page initially
       mountSharedForm('publicFormMount');
       resetWorkshopFormFields();
       switchFormMode('job');
 
-      // Populate Google Setup Fields & Apps Script Code
-      document.getElementById('googleSheetUrlInput').value = appConfig.googleSheetUrl || '';
-      document.getElementById('googleWebAppUrlInput').value = appConfig.googleWebAppUrl || '';
+      // Populate Google Setup Fields & Apps Script Code with permanent default URLs
+      document.getElementById('googleSheetUrlInput').value = appConfig.googleSheetUrl || DEFAULT_SHEET_URL;
+      document.getElementById('googleWebAppUrlInput').value = appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL;
       document.getElementById('newAdminIdInput').value = appConfig.adminId || 'SALMAN-ADMIN';
       document.getElementById('appsScriptCodeBlock').textContent = GOOGLE_APPS_SCRIPT_TEMPLATE;
 
       refreshAllUI();
+      // Immediately retrieve live records & workers from Google Sheets on every page visit
+      fetchFromGoogleSheets(true);
       if (window.lucide) window.lucide.createIcons();
 
       // Form Mode Switchers
@@ -2389,11 +2586,6 @@ function formatWorkerRow(w) {
                 onClick: async () => {
                   records = records.filter((item) => item.id !== id);
                   saveLocalData();
-                  if (db && currentUser) {
-                    try {
-                      await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'salman_records', id));
-                    } catch (err) {}
-                  }
                   renderAdminDashboard();
                   showToast('Record deleted.');
                 }
@@ -2488,13 +2680,27 @@ function formatWorkerRow(w) {
       // Google Sheets & Google Sites Setup Actions
       document.getElementById('googleConfigForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        appConfig.googleSheetUrl = document.getElementById('googleSheetUrlInput').value.trim();
-        appConfig.googleWebAppUrl = document.getElementById('googleWebAppUrlInput').value.trim();
+        appConfig.googleSheetUrl = document.getElementById('googleSheetUrlInput').value.trim() || DEFAULT_SHEET_URL;
+        appConfig.googleWebAppUrl = document.getElementById('googleWebAppUrlInput').value.trim() || DEFAULT_SCRIPT_URL;
         saveLocalData();
         updateSyncIndicators();
-        showToast('Google Sheets connection saved!');
+        fetchFromGoogleSheets(false);
       });
 
+      document.getElementById('resetDefaultUrlsBtn').addEventListener('click', () => {
+        appConfig.googleSheetUrl = DEFAULT_SHEET_URL;
+        appConfig.googleWebAppUrl = DEFAULT_SCRIPT_URL;
+        document.getElementById('googleSheetUrlInput').value = DEFAULT_SHEET_URL;
+        document.getElementById('googleWebAppUrlInput').value = DEFAULT_SCRIPT_URL;
+        saveLocalData();
+        updateSyncIndicators();
+        fetchFromGoogleSheets(false);
+        showToast('Restored default Salman Welding Google Sheet & Script URLs!');
+      });
+
+      document.getElementById('pullLatestFromSheetBtn').addEventListener('click', () => fetchFromGoogleSheets(false));
+      document.getElementById('dashPullCloudBtn').addEventListener('click', () => fetchFromGoogleSheets(false));
+      document.getElementById('publicPullCloudBtn').addEventListener('click', () => fetchFromGoogleSheets(false));
       document.getElementById('syncAllToSheetBtn').addEventListener('click', syncAllDataToGoogleSheet);
       document.getElementById('dashSyncNowBtn').addEventListener('click', syncAllDataToGoogleSheet);
 
@@ -2515,12 +2721,12 @@ function formatWorkerRow(w) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'Salman_Welding_Workshop_Ledger.html';
+        a.download = 'index.html';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast('Standalone HTML downloaded for Google Sites!');
+        showToast('index.html downloaded — ready to upload to GitHub!');
       });
 
       // Admin Security Update Form
