@@ -146,12 +146,12 @@
         <div class="bg-gradient-to-r from-navy-800 via-navy-800 to-navy-700 rounded-2xl p-4 sm:p-5 border border-sky-500/25 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="flex items-start gap-3.5">
             <div class="w-10 h-10 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 flex items-center justify-center shrink-0 mt-0.5">
-              <i data-lucide="clipboard-edit" class="w-5 h-5"></i>
+              <i data-lucide="key-round" class="w-5 h-5"></i>
             </div>
             <div>
-              <h2 class="text-sm sm:text-base font-bold text-white">Daily Workshop Record Submission</h2>
+              <h2 class="text-sm sm:text-base font-bold text-white">Authorized Staff Entry Portal</h2>
               <p class="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
-                Welcome! Workshop staff can log <strong class="text-sky-300">Job Income</strong>, <strong class="text-amber-300">Worker Daily &amp; Food Fees</strong>, and <strong class="text-rose-300">Material Expenses</strong> below. All submissions save automatically to the workshop database and Google Sheet. Full financial balances remain private to Admin.
+                Enter your assigned <strong class="text-amber-300">Worker Staff ID</strong> below to unlock record submission. Only registered workshop staff with a valid Staff ID can save <strong class="text-sky-300">Job Income</strong>, <strong class="text-amber-300">Worker Daily &amp; Food Fees</strong>, or <strong class="text-rose-300">Material Expenses</strong> to the database.
               </p>
             </div>
           </div>
@@ -191,7 +191,7 @@
 
       <!-- Footer -->
       <footer class="border-t border-navy-800 py-4 px-4 text-center text-xs text-slate-400">
-        SALMAN WELDING WORKSHOP LEDGER • Secure Chromebook &amp; GitHub Pages Portal
+        SALMAN WELDING WORKSHOP LEDGER • Secure Staff-ID Protected Portal
       </footer>
     </div>
 
@@ -490,13 +490,13 @@
           </section>
 
           <!-- ===============================================================
-               ADMIN TAB 3: WORKERS DIRECTORY (Add/Remove & Allowance Summary)
+               ADMIN TAB 3: WORKERS DIRECTORY (Add/Remove & Staff ID Management)
                =============================================================== -->
           <section id="tab-workers" class="admin-tab-panel hidden space-y-6">
             <div>
-              <h2 class="text-xl sm:text-2xl font-extrabold text-white">Workshop Workers Directory</h2>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-white">Workshop Workers Directory &amp; Staff IDs</h2>
               <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
-                Add or remove workshop staff and set their default Daily Labor Fee &amp; Food Fee. Registered workers automatically appear in the Public Landing Page dropdown.
+                Register workshop staff with a unique <strong class="text-amber-300">Worker Staff ID</strong>, Daily Labor Fee, and Food Fee. Workers must enter their assigned Staff ID on the landing page before any entry can be saved.
               </p>
             </div>
 
@@ -507,12 +507,18 @@
                   <i data-lucide="user-plus" class="w-4 h-4 text-amber-400"></i>
                   <span>Register New Worker</span>
                 </h3>
-                <p class="text-xs text-slate-400 mb-4">Set standard daily wage and food allowance in Naira (₦)</p>
+                <p class="text-xs text-slate-400 mb-4">Assign a private Staff ID and standard rates in Naira (₦)</p>
 
                 <form id="addWorkerForm" class="space-y-3.5">
-                  <div>
-                    <label for="workerNameInput" class="block text-xs font-bold text-slate-300 mb-1">Worker Full Name *</label>
-                    <input type="text" id="workerNameInput" required placeholder="e.g., Ibrahim Abdullahi" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                  <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                    <div class="sm:col-span-7">
+                      <label for="workerNameInput" class="block text-xs font-bold text-slate-300 mb-1">Worker Full Name *</label>
+                      <input type="text" id="workerNameInput" required placeholder="e.g., Ibrahim Abdullahi" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                    </div>
+                    <div class="sm:col-span-5">
+                      <label for="workerStaffIdInput" class="block text-xs font-bold text-amber-300 mb-1">Staff ID *</label>
+                      <input type="text" id="workerStaffIdInput" required placeholder="e.g., SWW-105" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-amber-500/40 text-sm font-mono font-extrabold uppercase text-amber-300 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+                    </div>
                   </div>
 
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -556,7 +562,7 @@
                 <div class="p-5 border-b border-navy-700/80 flex items-center justify-between">
                   <div>
                     <h3 class="text-base font-extrabold text-white">Active Workshop Workers</h3>
-                    <p class="text-xs text-slate-400">Cumulative daily labor &amp; food allowances paid per worker</p>
+                    <p class="text-xs text-slate-400">Share each worker's Staff ID privately so they can submit workshop entries</p>
                   </div>
                 </div>
                 <div id="workersListContainer" class="divide-y divide-navy-800"></div>
@@ -630,7 +636,7 @@
                   <span class="w-7 h-7 rounded-full bg-amber-500 text-navy-950 font-extrabold text-xs flex items-center justify-center">2</span>
                   <div>
                     <h3 class="text-base font-extrabold text-white">Google Apps Script Auto-Generator Code</h3>
-                    <p class="text-xs text-slate-400">Automatically creates <code class="text-sky-300">Master_Ledger</code> and <code class="text-amber-300">Workers</code> tabs in your Google Drive Sheet</p>
+                    <p class="text-xs text-slate-400">Automatically creates <code class="text-sky-300">Master_Ledger</code> and <code class="text-amber-300">Workers</code> tabs (including Worker Staff IDs) in your Google Sheet</p>
                   </div>
                 </div>
                 <button type="button" id="copyAppsScriptBtn" class="inline-flex items-center gap-2 px-4 min-h-[42px] rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-950 font-extrabold text-xs transition cursor-pointer">
@@ -640,11 +646,11 @@
               </div>
 
               <ol class="text-xs text-slate-300 space-y-1.5 list-decimal list-inside bg-navy-900/90 p-4 rounded-xl border border-navy-700">
-                <li>Open Google Drive on your Chromebook and create a new <strong>Google Sheet</strong> named <em>Salman Welding Workshop Ledger</em>.</li>
+                <li>Open Google Drive on your Chromebook and create or open your <strong>Google Sheet</strong> named <em>Salman Welding Workshop Ledger</em>.</li>
                 <li>In the Google Sheet top menu, click <strong>Extensions &rarr; Apps Script</strong>.</li>
-                <li>Delete any default code, click <strong>Copy Google Apps Script Code</strong> above, and paste it into the editor.</li>
-                <li>Click <strong>Deploy &rarr; New deployment &rarr; Web app</strong>. Set <em>Execute as: Me</em> and <em>Who has access: Anyone</em>.</li>
-                <li>Copy the generated <strong>Web App URL</strong> and paste it into Step 1 above!</li>
+                <li>Delete any old code, click <strong>Copy Google Apps Script Code</strong> above, and paste it into the editor.</li>
+                <li>Click <strong>Deploy &rarr; Manage deployments &rarr; Edit (pencil icon) &rarr; New version &rarr; Deploy</strong>.</li>
+                <li>Click <strong>Push All Local Records to Sheet</strong> in Step 1 so all Worker Staff IDs sync to your sheet!</li>
               </ol>
 
               <pre id="appsScriptCodeBlock" class="bg-navy-950 text-sky-300 text-xs p-4 rounded-xl border border-navy-700 overflow-x-auto max-h-60 leading-relaxed font-mono"></pre>
@@ -676,7 +682,7 @@
                   <p class="font-bold text-white">Step B: Enable GitHub Pages Live Link</p>
                   <p>1. In your repository, go to <strong>Settings &rarr; Pages</strong>.</p>
                   <p>2. Under <strong>Branch</strong>, select <code class="text-amber-300">main</code> and folder <code class="text-amber-300">/ (root)</code>, then click <strong>Save</strong>.</p>
-                  <p>3. Share your <code class="text-emerald-300">username.github.io/repo-name</code> link with workers—it auto-syncs with your Google Sheet!</p>
+                  <p>3. Share your <code class="text-emerald-300">username.github.io/repo-name</code> link with workers—they will need their assigned Staff ID to submit!</p>
                 </div>
               </div>
             </div>
@@ -725,9 +731,29 @@
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h3 class="text-lg sm:text-xl font-extrabold text-white">Log Workshop Record</h3>
-          <p class="text-xs text-slate-400">Select record mode below — saves immediately to workshop ledger &amp; Google Sheet</p>
+          <p class="text-xs text-slate-400">Verify Staff ID and select record mode below to save to workshop ledger &amp; Google Sheet</p>
         </div>
         <span class="text-xs font-bold px-3 py-1 rounded-full bg-navy-800 border border-navy-700 text-sky-300">Currency: ₦ NGN</span>
+      </div>
+
+      <!-- WORKER STAFF ID VERIFICATION GATE (Mandatory on Public Landing Page) -->
+      <div id="workerAuthGateBox" class="p-4 rounded-2xl bg-navy-900/95 border-2 border-amber-500/40 space-y-2.5">
+        <div class="flex flex-col sm:flex-row sm:items-end gap-3">
+          <div class="flex-1">
+            <label for="entryWorkerStaffId" class="block text-xs font-extrabold uppercase tracking-wider text-amber-300 mb-1.5 flex items-center gap-1.5">
+              <i data-lucide="id-card" class="w-4 h-4"></i>
+              <span>Worker Staff ID Required to Submit *</span>
+            </label>
+            <input type="text" id="entryWorkerStaffId" autocomplete="off" placeholder="Enter your assigned Staff ID (e.g., SWW-101)" class="w-full min-h-[46px] px-4 rounded-xl bg-navy-850 border border-navy-600 text-sm font-mono font-extrabold uppercase text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+          </div>
+          <div id="workerAuthStatusBadge" class="min-h-[46px] px-4 rounded-xl bg-navy-850 border border-navy-700 flex items-center gap-2 text-xs font-bold text-slate-400 shrink-0">
+            <i data-lucide="lock" class="w-4 h-4 text-amber-400 shrink-0"></i>
+            <span>Locked — Enter Valid Staff ID</span>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-400">
+          Your Staff ID identifies who logged the entry and prevents unauthorized uploads to the Google Sheet.
+        </p>
       </div>
 
       <!-- 3 Mode Selector Tabs -->
@@ -788,8 +814,8 @@
               </select>
             </div>
             <div>
-              <label for="jobLoggedBy" class="block text-xs font-bold text-slate-300 mb-1">Worker / Staff Name Logging It *</label>
-              <input type="text" id="jobLoggedBy" placeholder="e.g., Ibrahim (Master Welder)" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+              <label for="jobLoggedBy" class="block text-xs font-bold text-slate-300 mb-1">Verified Staff Logging Entry *</label>
+              <input type="text" id="jobLoggedBy" placeholder="Auto-fills when Staff ID is entered" class="w-full min-h-[44px] px-3.5 rounded-xl bg-navy-900 border border-navy-700 text-sm font-bold text-emerald-300 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500" />
             </div>
           </div>
 
@@ -973,13 +999,11 @@
         </button>
       </div>
 
-      <!-- Discreet Setup Helper Box -->
+      <!-- Workshop Location Box -->
       <div class="p-3.5 rounded-2xl bg-navy-900/95 border border-sky-500/25 text-xs text-slate-300 space-y-1">
         <p class="font-bold text-sky-300 flex items-center gap-1.5">
-          
           <span>BAKIN KASUWA, KAFIN-HAUSA LG JIGAWA STATE.</span>
         </p>
-        
       </div>
 
       <form id="adminLoginForm" class="space-y-4">
@@ -1050,6 +1074,7 @@
     };
 
     let isAdminLoggedIn = false;
+    let verifiedWorker = null;
     let lastSubmittedRecord = null;
     let incomeChartInstance = null;
     let expenseChartInstance = null;
@@ -1057,10 +1082,10 @@
     // --- 2. Pre-Loaded Realistic Welding Workshop Sample Data ---
     function getDefaultWorkers() {
       return [
-        { id: 'wrk-1', name: 'Ibrahim Abdullahi', role: 'Master Welder', phone: '0803 441 9012', dailyFee: 6000, foodFee: 1500 },
-        { id: 'wrk-2', name: 'Sani Garba', role: 'Senior Fabricator', phone: '0806 219 3340', dailyFee: 5000, foodFee: 1500 },
-        { id: 'wrk-3', name: 'Tunde Adewale', role: 'Arc / MIG Welder', phone: '0705 882 1104', dailyFee: 4500, foodFee: 1200 },
-        { id: 'wrk-4', name: 'Musa Yusuf', role: 'Apprentice', phone: '0812 770 4491', dailyFee: 2000, foodFee: 1000 }
+        { id: 'wrk-1', staffId: 'SWW-101', name: 'Ibrahim Abdullahi', role: 'Master Welder', phone: '0803 441 9012', dailyFee: 6000, foodFee: 1500 },
+        { id: 'wrk-2', staffId: 'SWW-102', name: 'Sani Garba', role: 'Senior Fabricator', phone: '0806 219 3340', dailyFee: 5000, foodFee: 1500 },
+        { id: 'wrk-3', staffId: 'SWW-103', name: 'Tunde Adewale', role: 'Arc / MIG Welder', phone: '0705 882 1104', dailyFee: 4500, foodFee: 1200 },
+        { id: 'wrk-4', staffId: 'SWW-104', name: 'Musa Yusuf', role: 'Apprentice', phone: '0812 770 4491', dailyFee: 2000, foodFee: 1000 }
       ];
     }
 
@@ -1086,7 +1111,7 @@
           paidAmount: 300000,
           balanceDue: 150000,
           paymentMethod: 'Bank Transfer',
-          loggedBy: 'Ibrahim Abdullahi',
+          loggedBy: 'Ibrahim Abdullahi (SWW-101)',
           notes: '65% mobilization deposit paid. Balance due on installation.'
         },
         {
@@ -1099,6 +1124,7 @@
           description: '10 lengths 2x2 galvanized pipes & 4mm mild steel plates',
           paidAmount: 142000,
           paymentMethod: 'Bank Transfer',
+          loggedBy: 'Ibrahim Abdullahi (SWW-101)',
           notes: 'Materials for JOB-1041 gate frame'
         },
         {
@@ -1113,6 +1139,7 @@
           foodFee: 1500,
           paidAmount: 7500,
           paymentMethod: 'Cash',
+          loggedBy: 'Ibrahim Abdullahi (SWW-101)',
           notes: 'Full day gate frame fabrication & lunch allowance'
         },
         {
@@ -1127,6 +1154,7 @@
           foodFee: 1000,
           paidAmount: 3000,
           paymentMethod: 'Cash',
+          loggedBy: 'Ibrahim Abdullahi (SWW-101)',
           notes: 'Grinding, surface prep & lunch fee'
         },
         {
@@ -1142,7 +1170,7 @@
           paidAmount: 220000,
           balanceDue: 0,
           paymentMethod: 'Bank Transfer',
-          loggedBy: 'Sani Garba',
+          loggedBy: 'Sani Garba (SWW-102)',
           notes: 'Completed, anti-rust primed, and installed on site.'
         },
         {
@@ -1155,6 +1183,7 @@
           description: '3 packets Gauge-12 welding electrodes & 15 cutting discs',
           paidAmount: 28500,
           paymentMethod: 'Cash',
+          loggedBy: 'Sani Garba (SWW-102)',
           notes: 'Workshop consumables restock'
         }
       ];
@@ -1188,6 +1217,20 @@
         }
       });
       return `JOB-${maxNum + 1}`;
+    }
+
+    function getNextWorkerStaffId() {
+      let maxNum = 100;
+      workers.forEach((w) => {
+        if (w.staffId) {
+          const match = String(w.staffId).match(/(\d+)/);
+          if (match) {
+            const val = parseInt(match[1], 10);
+            if (val > maxNum) maxNum = val;
+          }
+        }
+      });
+      return `SWW-${maxNum + 1}`;
     }
 
     let toastTimer = null;
@@ -1233,7 +1276,14 @@
       modal.classList.add('flex');
     }
 
-    // --- 4. Storage Persistence (LocalStorage + Firestore + Google Sheets GET/POST) ---
+    // --- 4. Storage Persistence (LocalStorage + Google Sheets GET/POST) ---
+    function ensureWorkersHaveStaffIds(list) {
+      return (list || []).map((w, idx) => ({
+        ...w,
+        staffId: (w.staffId || `SWW-${101 + idx}`).trim().toUpperCase()
+      }));
+    }
+
     function loadLocalData() {
       try {
         const cfg = localStorage.getItem(LS_CONFIG_KEY);
@@ -1251,14 +1301,13 @@
         }
 
         const wrk = localStorage.getItem(LS_WORKERS_KEY);
-        workers = wrk ? JSON.parse(wrk) : getDefaultWorkers();
-        if (!wrk) localStorage.setItem(LS_WORKERS_KEY, JSON.stringify(workers));
+        workers = wrk ? ensureWorkersHaveStaffIds(JSON.parse(wrk)) : getDefaultWorkers();
+        localStorage.setItem(LS_WORKERS_KEY, JSON.stringify(workers));
 
         const recs = localStorage.getItem(LS_RECORDS_KEY);
         records = recs ? JSON.parse(recs) : getDefaultRecords();
         if (!recs) localStorage.setItem(LS_RECORDS_KEY, JSON.stringify(records));
       } catch (e) {
-        // Cross-origin Google Sites iframe fallback when localStorage is restricted
         appConfig.googleSheetUrl = DEFAULT_SHEET_URL;
         appConfig.googleWebAppUrl = DEFAULT_SCRIPT_URL;
         workers = getDefaultWorkers();
@@ -1299,144 +1348,27 @@
           records = data.records;
           updated = true;
         }
-        if (data && Array.isArray(data.workers)) {
-          workers = data.workers;
+        if (data && Array.isArray(data.workers) && data.workers.length > 0) {
+          workers = ensureWorkersHaveStaffIds(data.workers);
           updated = true;
         }
 
         if (updated) {
           saveLocalData();
           refreshAllUI();
-          // Refresh next job ticket # on form if user hasn't typed into it yet
+          verifyStaffIdInput();
           const ticketInput = document.getElementById('jobTicket');
           if (ticketInput && !document.getElementById('jobClientName').value.trim()) {
             ticketInput.value = getNextJobTicket();
           }
         }
 
-        updateSyncIndicators(true);
+        updateSyncIndicators();
         if (!silent) showToast(`Retrieved ${records.length} records & ${workers.length} workers from Google Sheet!`);
         return true;
       } catch (err) {
         console.warn('Google Sheets GET fetch note:', err);
-        updateSyncIndicators(true);
-        if (!silent) {
-          showToast('Connected to Google Sheet (Ensure Apps Script has doGet deployed for live pull).', true);
-        }
-        return false;
-      }
-    }
-
-    async function initCloudDatabase() {
-      try {
-        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-          const firebaseConfig = JSON.parse(__firebase_config);
-          const app = initializeApp(firebaseConfig);
-          auth = getAuth(app);
-          db = getFirestore(app);
-
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-            await signInAnonymously(auth);
-          }
-
-          onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (!user) return;
-
-            // Subscribe to shared public workshop records
-            const recsRef = collection(db, 'artifacts', appId, 'public', 'data', 'salman_records');
-            onSnapshot(
-              recsRef,
-              (snap) => {
-                if (!snap.empty) {
-                  records = snap.docs.map((d) => d.data());
-                  saveLocalData();
-                  refreshAllUI();
-                }
-              },
-              (err) => console.warn('Firestore records listener:', err)
-            );
-
-            // Subscribe to shared workshop workers
-            const wrkRef = collection(db, 'artifacts', appId, 'public', 'data', 'salman_workers');
-            onSnapshot(
-              wrkRef,
-              (snap) => {
-                if (!snap.empty) {
-                  workers = snap.docs.map((d) => d.data());
-                  saveLocalData();
-                  refreshAllUI();
-                }
-              },
-              (err) => console.warn('Firestore workers listener:', err)
-            );
-          });
-        }
-      } catch (e) {
-        // Fallback when localStorage is restricted
-        appConfig.googleSheetUrl = DEFAULT_SHEET_URL;
-        appConfig.googleWebAppUrl = DEFAULT_SCRIPT_URL;
-        workers = getDefaultWorkers();
-        records = getDefaultRecords();
-      }
-    }
-
-    function saveLocalData() {
-      try {
-        localStorage.setItem(LS_RECORDS_KEY, JSON.stringify(records));
-        localStorage.setItem(LS_WORKERS_KEY, JSON.stringify(workers));
-        localStorage.setItem(LS_CONFIG_KEY, JSON.stringify(appConfig));
-      } catch (e) {}
-    }
-
-    // Automatically retrieve live records and workers from Google Sheets on page load & sync
-    async function fetchFromGoogleSheets(silent = true) {
-      const scriptUrl = (appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL).trim();
-      if (!scriptUrl) return false;
-
-      const pubText = document.getElementById('publicSyncText');
-      const admLabel = document.getElementById('adminSyncLabel');
-      if (pubText) pubText.textContent = 'Syncing Sheet...';
-      if (admLabel) admLabel.textContent = 'Google Sheet: Syncing...';
-
-      try {
-        const separator = scriptUrl.includes('?') ? '&' : '?';
-        const response = await fetch(`${scriptUrl}${separator}action=getData&t=${Date.now()}`, {
-          method: 'GET',
-          redirect: 'follow'
-        });
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-
-        let updated = false;
-        if (data && Array.isArray(data.records)) {
-          records = data.records;
-          updated = true;
-        }
-        if (data && Array.isArray(data.workers)) {
-          workers = data.workers;
-          updated = true;
-        }
-
-        if (updated) {
-          saveLocalData();
-          refreshAllUI();
-          // Refresh next job ticket # on form if user hasn't typed into it yet
-          const ticketInput = document.getElementById('jobTicket');
-          if (ticketInput && !document.getElementById('jobClientName').value.trim()) {
-            ticketInput.value = getNextJobTicket();
-          }
-        }
-
-        updateSyncIndicators(true);
-        if (!silent) showToast(`Retrieved ${records.length} records & ${workers.length} workers from Google Sheet!`);
-        return true;
-      } catch (err) {
-        console.warn('Google Sheets GET fetch note:', err);
-        updateSyncIndicators(true);
+        updateSyncIndicators();
         if (!silent) {
           showToast('Connected to Google Sheet (Ensure Apps Script has doGet deployed for live pull).', true);
         }
@@ -1445,7 +1377,6 @@
     }
 
     async function syncRecordToCloud(record) {
-      // Push HTTP POST to Google Apps Script Web App URL (Google Sheet in Google Drive)
       const webAppUrl = (appConfig.googleWebAppUrl || DEFAULT_SCRIPT_URL).trim();
       if (!webAppUrl) {
         return { syncedToSheet: false, message: 'Saved locally.' };
@@ -1547,7 +1478,64 @@
       }
     }
 
-    // --- 5. Unified 3-Mode Workshop Form Management ---
+    // --- 5. Worker Staff ID Verification Logic ---
+    function verifyStaffIdInput() {
+      const gateBox = document.getElementById('workerAuthGateBox');
+      const inputEl = document.getElementById('entryWorkerStaffId');
+      const badgeEl = document.getElementById('workerAuthStatusBadge');
+      const loggedByInput = document.getElementById('jobLoggedBy');
+      const laborSelect = document.getElementById('laborWorkerSelect');
+
+      if (!gateBox || !inputEl || !badgeEl) return null;
+
+      // Admin bypass when logged into Admin Portal
+      if (isAdminLoggedIn) {
+        gateBox.classList.add('hidden');
+        verifiedWorker = null;
+        return { id: 'admin', staffId: 'ADMIN', name: 'Admin', role: 'Workshop Admin' };
+      }
+
+      gateBox.classList.remove('hidden');
+      const entered = inputEl.value.trim().toUpperCase();
+
+      if (!entered) {
+        verifiedWorker = null;
+        gateBox.className = 'p-4 rounded-2xl bg-navy-900/95 border-2 border-amber-500/40 space-y-2.5 transition';
+        badgeEl.className = 'min-h-[46px] px-4 rounded-xl bg-navy-850 border border-navy-700 flex items-center gap-2 text-xs font-bold text-slate-400 shrink-0';
+        badgeEl.innerHTML = `<i data-lucide="lock" class="w-4 h-4 text-amber-400 shrink-0"></i><span>Locked — Enter Valid Staff ID</span>`;
+        if (loggedByInput) loggedByInput.value = '';
+        if (window.lucide) window.lucide.createIcons();
+        return null;
+      }
+
+      const matched = workers.find((w) => String(w.staffId || '').trim().toUpperCase() === entered);
+      if (matched) {
+        verifiedWorker = matched;
+        gateBox.className = 'p-4 rounded-2xl bg-emerald-950/35 border-2 border-emerald-500/50 space-y-2.5 transition';
+        badgeEl.className = 'min-h-[46px] px-4 rounded-xl bg-emerald-500/15 border border-emerald-400/40 flex items-center gap-2 text-xs font-extrabold text-emerald-300 shrink-0';
+        badgeEl.innerHTML = `<i data-lucide="badge-check" class="w-4 h-4 text-emerald-400 shrink-0"></i><span>Verified: ${esc(matched.name)} (${esc(matched.role)})</span>`;
+
+        if (loggedByInput) {
+          loggedByInput.value = `${matched.name} (${matched.staffId})`;
+        }
+        if (laborSelect && laborSelect.querySelector(`option[value="${matched.id}"]`)) {
+          laborSelect.value = matched.id;
+          handleWorkerSelectionChange();
+        }
+        if (window.lucide) window.lucide.createIcons();
+        return matched;
+      } else {
+        verifiedWorker = null;
+        gateBox.className = 'p-4 rounded-2xl bg-rose-950/35 border-2 border-rose-500/50 space-y-2.5 transition';
+        badgeEl.className = 'min-h-[46px] px-4 rounded-xl bg-rose-500/15 border border-rose-400/40 flex items-center gap-2 text-xs font-extrabold text-rose-300 shrink-0';
+        badgeEl.innerHTML = `<i data-lucide="shield-alert" class="w-4 h-4 text-rose-400 shrink-0"></i><span>Invalid Staff ID — Access Denied</span>`;
+        if (loggedByInput) loggedByInput.value = '';
+        if (window.lucide) window.lucide.createIcons();
+        return null;
+      }
+    }
+
+    // --- 6. Unified 3-Mode Workshop Form Management ---
     function mountSharedForm(targetContainerId) {
       const formWrapper = document.getElementById('sharedWorkshopFormContainer');
       const target = document.getElementById(targetContainerId);
@@ -1555,6 +1543,7 @@
         formWrapper.classList.remove('hidden');
         target.appendChild(formWrapper);
       }
+      verifyStaffIdInput();
     }
 
     function switchFormMode(mode) {
@@ -1664,7 +1653,8 @@
       document.getElementById('laborTotalAllowanceText').textContent = formatNaira(daily + food);
     }
 
-    function resetWorkshopFormFields() {
+    function resetWorkshopFormFields(preserveStaffId = false) {
+      const currentStaffId = preserveStaffId ? document.getElementById('entryWorkerStaffId').value : '';
       const todayStr = new Date().toISOString().split('T')[0];
       document.getElementById('workshopRecordForm').reset();
       document.getElementById('jobDate').value = todayStr;
@@ -1674,9 +1664,12 @@
       populateWorkerDropdown();
       updateJobBalancePreview();
       updateLaborTotalPreview();
+
+      document.getElementById('entryWorkerStaffId').value = currentStaffId;
+      verifyStaffIdInput();
     }
 
-    // --- 6. Printable Slip / Receipt Generator ---
+    // --- 7. Printable Slip / Receipt Generator ---
     function printRecordSlip(record) {
       if (!record) return;
       const box = document.getElementById('printSlipContainer');
@@ -1747,6 +1740,7 @@
           </div>
           ${bodyDetails}
           ${record.notes ? `<div class="text-xs text-slate-600 pt-1"><strong>Notes:</strong> ${esc(record.notes)}</div>` : ''}
+          ${record.loggedBy && record.mode !== 'job' ? `<div class="text-xs text-slate-500"><strong>Logged By:</strong> ${esc(record.loggedBy)}</div>` : ''}
           <div class="pt-6 flex justify-between text-[11px] text-slate-500 border-t border-dashed border-slate-400">
             <span>Workshop Authorized Sign</span>
             <span>Recipient / Client Sign</span>
@@ -1757,7 +1751,7 @@
       window.print();
     }
 
-    // --- 7. Admin Portal Rendering (KPIs, Charts, Ledger, Workers) ---
+    // --- 8. Admin Portal Rendering (KPIs, Charts, Ledger, Workers) ---
     function renderAdminDashboard() {
       let totalIncome = 0;
       let totalExpenses = 0;
@@ -1911,7 +1905,7 @@
           if (typeFilter === 'unpaid' && !(r.mode === 'job' && (Number(r.balanceDue) || 0) > 0)) return false;
 
           if (q) {
-            const text = `${r.reference} ${r.date} ${r.clientName || ''} ${r.workerName || ''} ${r.vendor || ''} ${r.category || ''} ${r.description || ''} ${r.notes || ''}`.toLowerCase();
+            const text = `${r.reference} ${r.date} ${r.clientName || ''} ${r.workerName || ''} ${r.vendor || ''} ${r.category || ''} ${r.description || ''} ${r.loggedBy || ''} ${r.notes || ''}`.toLowerCase();
             if (!text.includes(q)) return false;
           }
           return true;
@@ -1955,12 +1949,12 @@
         } else if (isLabor) {
           typeBadge = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">Labor &amp; Food</span>`;
           titleText = `${esc(r.workerName)} (${esc(r.workerRole)})`;
-          subText = `Daily Fee: ${formatNaira(r.dailyFee)} + Food Fee: ${formatNaira(r.foodFee)}`;
+          subText = `Daily Fee: ${formatNaira(r.dailyFee)} + Food Fee: ${formatNaira(r.foodFee)}${r.loggedBy ? ` • By ${esc(r.loggedBy)}` : ''}`;
           statusHTML = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-navy-800 text-slate-300">${esc(r.paymentMethod)}</span>`;
         } else {
           typeBadge = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30">Expense</span>`;
           titleText = `${esc(r.vendor)} — ${esc(r.category)}`;
-          subText = esc(r.description);
+          subText = `${esc(r.description)}${r.loggedBy ? ` • By ${esc(r.loggedBy)}` : ''}`;
           statusHTML = `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-navy-800 text-slate-300">${esc(r.paymentMethod)}</span>`;
         }
 
@@ -2055,20 +2049,24 @@
 
     function renderWorkersDirectory() {
       document.getElementById('sidebarWorkersCount').textContent = workers.length;
+      const staffIdInput = document.getElementById('workerStaffIdInput');
+      if (staffIdInput && !staffIdInput.value.trim()) {
+        staffIdInput.value = getNextWorkerStaffId();
+      }
+
       const list = document.getElementById('workersListContainer');
       list.innerHTML = '';
 
       if (workers.length === 0) {
         list.innerHTML = `
           <div class="p-8 text-center text-xs text-slate-400">
-            No workers registered yet. Add a workshop worker on the left so they appear in the Labor &amp; Food Fee dropdown.
+            No workers registered yet. Add a workshop worker on the left with a Staff ID so they can log records.
           </div>
         `;
         return;
       }
 
       workers.forEach((w) => {
-        // Compute total labor & food paid to this worker
         let totalLaborPaid = 0;
         let totalFoodPaid = 0;
         records.forEach((r) => {
@@ -2083,6 +2081,7 @@
         item.innerHTML = `
           <div class="space-y-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-mono text-xs font-extrabold px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40">ID: ${esc(w.staffId)}</span>
               <h4 class="text-sm sm:text-base font-extrabold text-white">${esc(w.name)}</h4>
               <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">${esc(w.role)}</span>
             </div>
@@ -2116,7 +2115,7 @@
       }
     }
 
-    // --- 8. Google Apps Script Auto-Generator Code ---
+    // --- 9. Google Apps Script Auto-Generator Code ---
     const GOOGLE_APPS_SCRIPT_TEMPLATE = `/**
  * SALMAN WELDING WORKSHOP LEDGER — Google Sheets Auto-Backend
  * Automatically creates 'Master_Ledger' and 'Workers' tabs in your Google Sheet
@@ -2132,11 +2131,11 @@ function doPost(e) {
       'Record ID', 'Date', 'Reference #', 'Mode / Type', 'Category',
       'Client / Worker / Vendor', 'Phone', 'Description',
       'Agreed Price (NGN)', 'Daily Labor Fee (NGN)', 'Food Fee (NGN)',
-      'Total Paid (NGN)', 'Balance Due (NGN)', 'Payment Method', 'Logged By', 'Notes'
+      'Total Paid (NGN)', 'Balance Due (NGN)', 'Payment Method', 'Logged By (Staff ID)', 'Notes'
     ]);
 
     var workerSheet = getOrCreateSheet(ss, 'Workers', [
-      'Worker ID', 'Full Name', 'Workshop Role', 'Phone', 'Default Daily Fee (NGN)', 'Default Food Fee (NGN)'
+      'Worker ID', 'Staff ID', 'Full Name', 'Workshop Role', 'Phone', 'Default Daily Fee (NGN)', 'Default Food Fee (NGN)'
     ]);
 
     if (action === 'upsertRecord' && payload.record) {
@@ -2171,10 +2170,10 @@ function doGet(e) {
       'Record ID', 'Date', 'Reference #', 'Mode / Type', 'Category',
       'Client / Worker / Vendor', 'Phone', 'Description',
       'Agreed Price (NGN)', 'Daily Labor Fee (NGN)', 'Food Fee (NGN)',
-      'Total Paid (NGN)', 'Balance Due (NGN)', 'Payment Method', 'Logged By', 'Notes'
+      'Total Paid (NGN)', 'Balance Due (NGN)', 'Payment Method', 'Logged By (Staff ID)', 'Notes'
     ]);
     var workerSheet = getOrCreateSheet(ss, 'Workers', [
-      'Worker ID', 'Full Name', 'Workshop Role', 'Phone', 'Default Daily Fee (NGN)', 'Default Food Fee (NGN)'
+      'Worker ID', 'Staff ID', 'Full Name', 'Workshop Role', 'Phone', 'Default Daily Fee (NGN)', 'Default Food Fee (NGN)'
     ]);
 
     var lRows = ledgerSheet.getDataRange().getValues();
@@ -2213,11 +2212,12 @@ function doGet(e) {
       if (!w[0]) continue;
       workers.push({
         id: String(w[0]),
-        name: String(w[1] || ''),
-        role: String(w[2] || ''),
-        phone: String(w[3] || ''),
-        dailyFee: Number(w[4]) || 0,
-        foodFee: Number(w[5]) || 0
+        staffId: String(w[1] || ('SWW-' + (100 + j))),
+        name: String(w[2] || ''),
+        role: String(w[3] || ''),
+        phone: String(w[4] || ''),
+        dailyFee: Number(w[5]) || 0,
+        foodFee: Number(w[6]) || 0
       });
     }
 
@@ -2265,16 +2265,16 @@ function formatRecordRow(r) {
 }
 
 function formatWorkerRow(w) {
-  return [w.id, w.name, w.role, w.phone || '', w.dailyFee || 0, w.foodFee || 0];
+  return [w.id, w.staffId || '', w.name, w.role, w.phone || '', w.dailyFee || 0, w.foodFee || 0];
 }`;
 
-    // --- 9. Event Listeners & Application Boot ---
+    // --- 10. Event Listeners & Application Boot ---
     document.addEventListener('DOMContentLoaded', () => {
       loadLocalData();
 
       // Mount Shared Form to Public Landing Page initially
       mountSharedForm('publicFormMount');
-      resetWorkshopFormFields();
+      resetWorkshopFormFields(false);
       switchFormMode('job');
 
       // Populate Google Setup Fields & Apps Script Code with permanent default URLs
@@ -2288,6 +2288,9 @@ function formatWorkerRow(w) {
       fetchFromGoogleSheets(true);
       if (window.lucide) window.lucide.createIcons();
 
+      // Live Worker Staff ID Verification
+      document.getElementById('entryWorkerStaffId').addEventListener('input', verifyStaffIdInput);
+
       // Form Mode Switchers
       document.querySelectorAll('.form-mode-btn').forEach((btn) => {
         btn.addEventListener('click', () => switchFormMode(btn.dataset.formMode));
@@ -2300,9 +2303,21 @@ function formatWorkerRow(w) {
       document.getElementById('laborDailyFee').addEventListener('input', updateLaborTotalPreview);
       document.getElementById('laborFoodFee').addEventListener('input', updateLaborTotalPreview);
 
-      // Unified Form Submission (Works identically on Public Landing Page & Admin Portal)
+      // Unified Form Submission (Enforces Valid Worker Staff ID on Public Landing Page)
       document.getElementById('workshopRecordForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const authorizedStaff = verifyStaffIdInput();
+        if (!isAdminLoggedIn && !authorizedStaff) {
+          document.getElementById('entryWorkerStaffId').focus();
+          showToast('Access Denied: Please enter a valid registered Worker Staff ID before saving.', true);
+          return;
+        }
+
+        const submitterTag = isAdminLoggedIn
+          ? 'Admin (SALMAN-ADMIN)'
+          : `${authorizedStaff.name} (${authorizedStaff.staffId})`;
+
         const mode = document.getElementById('activeFormMode').value;
         let newRecord = null;
 
@@ -2312,7 +2327,7 @@ function formatWorkerRow(w) {
           const clientName = document.getElementById('jobClientName').value.trim();
           const clientPhone = document.getElementById('jobClientPhone').value.trim();
           const category = document.getElementById('jobCategory').value;
-          const loggedBy = document.getElementById('jobLoggedBy').value.trim();
+          const loggedBy = document.getElementById('jobLoggedBy').value.trim() || submitterTag;
           const description = document.getElementById('jobDescription').value.trim();
           const agreedPrice = parseFloat(document.getElementById('jobAgreedPrice').value);
           const paidAmount = parseFloat(document.getElementById('jobPaidNow').value);
@@ -2369,6 +2384,7 @@ function formatWorkerRow(w) {
             foodFee,
             paidAmount: dailyFee + foodFee,
             paymentMethod,
+            loggedBy: submitterTag,
             notes
           };
         } else {
@@ -2395,6 +2411,7 @@ function formatWorkerRow(w) {
             description,
             paidAmount,
             paymentMethod,
+            loggedBy: submitterTag,
             notes
           };
         }
@@ -2404,12 +2421,11 @@ function formatWorkerRow(w) {
         saveLocalData();
 
         const syncRes = await syncRecordToCloud(newRecord);
-        resetWorkshopFormFields();
+        resetWorkshopFormFields(true);
         switchFormMode(mode);
         refreshAllUI();
 
         if (!isAdminLoggedIn) {
-          // Public Worker Landing Confirmation (Strictly zero financial ledger exposure)
           const confirmCard = document.getElementById('publicConfirmationCard');
           const summaryEl = document.getElementById('publicConfirmSummary');
           const cloudEl = document.getElementById('publicConfirmCloudStatus');
@@ -2417,9 +2433,9 @@ function formatWorkerRow(w) {
           if (newRecord.mode === 'job') {
             summaryEl.textContent = `Ticket ${newRecord.reference} for ${newRecord.clientName} (${formatNaira(newRecord.paidAmount)} paid) logged by ${newRecord.loggedBy}.`;
           } else if (newRecord.mode === 'labor') {
-            summaryEl.textContent = `Allowance for ${newRecord.workerName} (Daily ${formatNaira(newRecord.dailyFee)} + Food ${formatNaira(newRecord.foodFee)}) recorded.`;
+            summaryEl.textContent = `Allowance for ${newRecord.workerName} (Daily ${formatNaira(newRecord.dailyFee)} + Food ${formatNaira(newRecord.foodFee)}) logged by ${newRecord.loggedBy}.`;
           } else {
-            summaryEl.textContent = `Expense (${newRecord.category} — ${formatNaira(newRecord.paidAmount)}) to ${newRecord.vendor} recorded.`;
+            summaryEl.textContent = `Expense (${newRecord.category} — ${formatNaira(newRecord.paidAmount)}) to ${newRecord.vendor} logged by ${newRecord.loggedBy}.`;
           }
 
           cloudEl.textContent = syncRes.message;
@@ -2481,7 +2497,7 @@ function formatWorkerRow(w) {
         document.getElementById('publicLandingView').classList.remove('hidden');
         document.getElementById('publicConfirmationCard').classList.add('hidden');
         mountSharedForm('publicFormMount');
-        resetWorkshopFormFields();
+        resetWorkshopFormFields(false);
         showToast('Logged out to Worker Landing Page.');
       }
 
@@ -2517,7 +2533,8 @@ function formatWorkerRow(w) {
 
         if (tabName === 'log-record') {
           mountSharedForm('adminFormMount');
-          resetWorkshopFormFields();
+          resetWorkshopFormFields(false);
+          document.getElementById('jobLoggedBy').value = 'Admin';
         } else if (tabName === 'dashboard') {
           renderAdminDashboard();
         } else if (tabName === 'workers') {
@@ -2619,19 +2636,26 @@ function formatWorkerRow(w) {
         });
       });
 
-      // Workers Directory: Add & Remove Workers
+      // Workers Directory: Add & Remove Workers with Staff ID
       document.getElementById('addWorkerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('workerNameInput').value.trim();
+        const staffId = (document.getElementById('workerStaffIdInput').value.trim() || getNextWorkerStaffId()).toUpperCase();
         const role = document.getElementById('workerRoleInput').value;
         const phone = document.getElementById('workerPhoneInput').value.trim();
         const dailyFee = parseFloat(document.getElementById('workerDailyFeeInput').value) || 0;
         const foodFee = parseFloat(document.getElementById('workerFoodFeeInput').value) || 0;
 
-        if (!name) return;
+        if (!name || !staffId) return;
+
+        if (workers.some((w) => String(w.staffId).toUpperCase() === staffId)) {
+          showToast(`Staff ID "${staffId}" is already assigned to another worker. Choose a unique ID.`, true);
+          return;
+        }
 
         const newWorker = {
           id: `wrk-${Date.now()}`,
+          staffId,
           name,
           role,
           phone,
@@ -2644,7 +2668,7 @@ function formatWorkerRow(w) {
         await syncWorkerToCloud(newWorker, false);
         document.getElementById('addWorkerForm').reset();
         refreshAllUI();
-        showToast(`${name} added to Workshop Workers!`);
+        showToast(`${name} (ID: ${staffId}) added to Workshop Workers!`);
       });
 
       document.getElementById('workersListContainer').addEventListener('click', (e) => {
@@ -2656,7 +2680,7 @@ function formatWorkerRow(w) {
 
         showConfirmModal({
           title: 'Remove Workshop Worker?',
-          message: `Remove ${workerObj.name} (${workerObj.role}) from the active workers list? Past payment logs will remain intact.`,
+          message: `Remove ${workerObj.name} (ID: ${workerObj.staffId}) from the active workers list? Their Staff ID will immediately lose submission access.`,
           buttons: [
             {
               label: 'Cancel',
@@ -2677,7 +2701,7 @@ function formatWorkerRow(w) {
         });
       });
 
-      // Google Sheets & Google Sites Setup Actions
+      // Google Sheets & GitHub Pages Setup Actions
       document.getElementById('googleConfigForm').addEventListener('submit', (e) => {
         e.preventDefault();
         appConfig.googleSheetUrl = document.getElementById('googleSheetUrlInput').value.trim() || DEFAULT_SHEET_URL;
